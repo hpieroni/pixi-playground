@@ -12,9 +12,11 @@ import {
   ListItemText,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Application, Sprite, Container } from "pixi.js";
+import { Application, Sprite } from "pixi.js";
+import { Viewport } from "pixi-viewport";
 
 const drawerWidth = 240;
+const AppBarWidth = 64;
 
 const theme = createTheme({
   palette: {
@@ -26,30 +28,48 @@ function Scene() {
   const containerRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const app = new Application({
-      view: containerRef?.current as HTMLCanvasElement,
-      resolution: window.devicePixelRatio || 1,
-      autoDensity: true,
-      backgroundColor: 0x2c2c31,
-    });
+    const width = window.innerWidth - drawerWidth;
+    const height = window.innerHeight - AppBarWidth;
 
-    const conty: Container = new Container();
-    conty.x = 0;
-    conty.y = 0;
-    app.stage.addChild(conty);
+    if (containerRef?.current) {
+      const app = new Application({
+        view: containerRef?.current as HTMLCanvasElement,
+        resolution: window.devicePixelRatio || 1,
+        autoDensity: true,
+        backgroundColor: 0x2c2c31,
+        width,
+        height,
+      });
 
-    const logo: Sprite = Sprite.from("./logo192.png");
-    logo.anchor.set(0.5);
-    logo.x = 100;
-    logo.y = 100;
-    conty.addChild(logo);
-  }, []);
+      // create viewport
+      const viewport = new Viewport({
+        screenWidth: width,
+        screenHeight: height,
+        // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
+        interaction: app.renderer.plugins.interaction,
+      });
+
+      // add the viewport to the stage
+      app.stage.addChild(viewport);
+
+      // activate plugins
+      viewport.drag().pinch().wheel().decelerate();
+
+      const logo: Sprite = Sprite.from("./logo192.png");
+      logo.anchor.set(0.5);
+      logo.x = 100;
+      logo.y = 100;
+      viewport.addChild(logo);
+    }
+  }, [containerRef]);
 
   return <canvas ref={containerRef} />;
 }
 
 function App() {
   return (
+    // <Scene />
+
     <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
@@ -82,7 +102,7 @@ function App() {
             </ListItem>
           </List>
         </Drawer>
-        <Box component="main" sx={{ flexGrow: 1 }}>
+        <Box component="main">
           <Toolbar />
           <Scene />
         </Box>
