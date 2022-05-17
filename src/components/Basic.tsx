@@ -1,14 +1,19 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Checkbox, FormControlLabel, Toolbar } from "@mui/material";
 import { Application, Sprite } from "pixi.js";
 import { Viewport } from "pixi-viewport";
 import { drawerWidth } from "./Layout";
 
+const toolbarHeight = 64;
+
 function Basic() {
   const containerRef = useRef<HTMLCanvasElement>(null);
+  const [viewport, setViewport] = useState<Viewport>();
+  const [plugins, setPlugins] = useState({ drag: true, wheel: true });
 
   useEffect(() => {
     const width = window.innerWidth - drawerWidth;
-    const height = window.innerHeight;
+    const height = window.innerHeight - toolbarHeight;
 
     const app = new Application({
       view: containerRef?.current as HTMLCanvasElement,
@@ -38,10 +43,59 @@ function Basic() {
     sprite.y = 0;
     viewport.addChild(sprite);
 
+    setViewport(viewport);
+
     return () => app.destroy();
   }, []);
 
-  return <canvas ref={containerRef} />;
+  const changePlugin = (name: string, value: boolean) => {
+    setPlugins({
+      ...plugins,
+      [name]: value,
+    });
+    if (value) {
+      viewport?.plugins.resume(name);
+    } else {
+      viewport?.plugins.pause(name);
+    }
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    changePlugin(event.target.name, event.target.checked);
+  };
+
+  return (
+    <>
+      <Toolbar
+        sx={{
+          backgroundColor: "#ffffff17",
+          borderBottom: "1px solid #ffffff1f",
+        }}
+      >
+        <FormControlLabel
+          label="Drag enabled"
+          control={
+            <Checkbox
+              checked={plugins.drag}
+              onChange={handleChange}
+              name="drag"
+            />
+          }
+        />
+        <FormControlLabel
+          label="Zoom enabled"
+          control={
+            <Checkbox
+              checked={plugins.wheel}
+              onChange={handleChange}
+              name="wheel"
+            />
+          }
+        />
+      </Toolbar>
+      <canvas ref={containerRef} />
+    </>
+  );
 }
 
 export default Basic;
