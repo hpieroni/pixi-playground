@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Application, Sprite } from "pixi.js";
+import { Application, Sprite, Ticker } from "pixi.js";
 import { Viewport } from "pixi-viewport";
+import { Simple } from "pixi-cull";
 import {
   Checkbox,
   FormControlLabel,
@@ -23,6 +24,7 @@ function StressTest() {
   const containerRef = useRef<HTMLCanvasElement>(null);
   const [numberOfElements, setNumberOfElements] = useState(100);
   const [fit, setFit] = useState(true);
+  const [cull, setCull] = useState(false);
 
   useEffect(() => {
     const width = window.innerWidth - drawerWidth;
@@ -67,8 +69,22 @@ function StressTest() {
       viewport.fit();
     }
 
+    if (cull) {
+      const simpleCull = new Simple(); // new SpatialHash()
+      simpleCull.addList(viewport.children);
+      simpleCull.cull(viewport.getVisibleBounds());
+
+      // cull whenever the viewport moves
+      Ticker.shared.add(() => {
+        if (viewport.dirty) {
+          simpleCull.cull(viewport.getVisibleBounds());
+          viewport.dirty = false;
+        }
+      });
+    }
+
     return () => app.destroy();
-  }, [numberOfElements, fit]);
+  }, [numberOfElements, fit, cull]);
 
   const handleChangeNumberOfElements = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -78,6 +94,10 @@ function StressTest() {
 
   const handleChangeFit = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFit(event.target.checked);
+  };
+
+  const handleChangeCull = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCull(event.target.checked);
   };
 
   return (
@@ -106,6 +126,10 @@ function StressTest() {
           <FormControlLabel
             label="Fit content"
             control={<Checkbox checked={fit} onChange={handleChangeFit} />}
+          />
+          <FormControlLabel
+            label="Enable culling"
+            control={<Checkbox checked={cull} onChange={handleChangeCull} />}
           />
         </Stack>
       </Toolbar>
