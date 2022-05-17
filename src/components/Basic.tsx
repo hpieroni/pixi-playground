@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Checkbox, FormControlLabel, Toolbar } from "@mui/material";
 import { Application, Sprite } from "pixi.js";
 import { Viewport } from "pixi-viewport";
+import { Checkbox, FormControlLabel, Toolbar } from "@mui/material";
 import { drawerWidth } from "./Layout";
 
 const toolbarHeight = 64;

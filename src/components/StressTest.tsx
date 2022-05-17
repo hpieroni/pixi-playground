@@ -1,14 +1,32 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Application, Sprite } from "pixi.js";
 import { Viewport } from "pixi-viewport";
+import {
+  Checkbox,
+  FormControlLabel,
+  MenuItem,
+  Stack,
+  TextField,
+  Toolbar,
+} from "@mui/material";
 import { drawerWidth } from "./Layout";
+
+const toolbarHeight = 64;
+
+const numberOfElementsOptions = [
+  100, 500, 1_000, 5_000, 10_000, 50_000, 100_000, 250_000, 500_000, 1_000_000,
+];
+
+const formatNumber = (n: number) => new Intl.NumberFormat().format(n);
 
 function StressTest() {
   const containerRef = useRef<HTMLCanvasElement>(null);
+  const [numberOfElements, setNumberOfElements] = useState(100);
+  const [fit, setFit] = useState(true);
 
   useEffect(() => {
     const width = window.innerWidth - drawerWidth;
-    const height = window.innerHeight;
+    const height = window.innerHeight - toolbarHeight;
 
     const app = new Application({
       view: containerRef?.current as HTMLCanvasElement,
@@ -33,8 +51,8 @@ function StressTest() {
     // activate plugins
     viewport.drag().pinch().wheel().decelerate();
 
-    const rows = 10;
-    const columns = 10;
+    const rows = Math.round(Math.sqrt(numberOfElements));
+    const columns = rows;
 
     for (let i = 0; i < rows; i++) {
       for (let j = 0; j < columns; j++) {
@@ -45,12 +63,55 @@ function StressTest() {
       }
     }
 
-    viewport.fit();
+    if (fit) {
+      viewport.fit();
+    }
 
     return () => app.destroy();
-  }, []);
+  }, [numberOfElements, fit]);
 
-  return <canvas ref={containerRef} />;
+  const handleChangeNumberOfElements = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setNumberOfElements(Number(event.target.value));
+  };
+
+  const handleChangeFit = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFit(event.target.checked);
+  };
+
+  return (
+    <>
+      <Toolbar
+        sx={{
+          backgroundColor: "#ffffff17",
+          borderBottom: "1px solid #ffffff1f",
+        }}
+      >
+        <Stack direction="row" spacing={2}>
+          <TextField
+            select
+            size="small"
+            label="No. Elements"
+            value={numberOfElements}
+            onChange={handleChangeNumberOfElements}
+            sx={{ width: 150 }}
+          >
+            {numberOfElementsOptions.map((value) => (
+              <MenuItem key={value} value={value}>
+                {formatNumber(value)}
+              </MenuItem>
+            ))}
+          </TextField>
+          <FormControlLabel
+            label="Fit content"
+            control={<Checkbox checked={fit} onChange={handleChangeFit} />}
+          />
+        </Stack>
+      </Toolbar>
+      <canvas ref={containerRef} />
+    </>
+  );
 }
 
 export default StressTest;
