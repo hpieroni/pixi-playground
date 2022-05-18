@@ -4,6 +4,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Layout from "./components/Layout";
 import Basic from "./components/Basic";
 import StressTest from "./components/StressTest";
+import EventCommunication from "./components/EventCommunication";
 
 const theme = createTheme({
   palette: {
@@ -21,6 +22,10 @@ function App() {
             <Route index element={<Basic />} />
             <Route path="basic" element={<Basic />} />
             <Route path="stress-test" element={<StressTest />} />
+            <Route
+              path="event-communication"
+              element={<EventCommunication />}
+            />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>
