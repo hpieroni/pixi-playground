@@ -59,8 +59,7 @@ function StressTest() {
     for (let i = 0; i < rows; i++) {
       for (let j = 0; j < columns; j++) {
         const sprite = Sprite.from("./logo192.png");
-        sprite.x = i * 200;
-        sprite.y = j * 200;
+        sprite.position.set(i * 200, j * 200);
         viewport.addChild(sprite);
       }
     }

@@ -74,10 +74,12 @@ class Pokemon extends Container {
     this.sprite = Sprite.from(`pokemons/${name}.png`);
     this.sprite.scale.set(0.5);
 
-    this.sprite.on("pointertap", this.onPointerTap, this);
-    this.sprite.on("pointerover", this.onPointerOver, this);
-    this.sprite.on("pointerout", this.onPointerOut, this);
+    this.sprite
+      .on("pointertap", this.onPointerTap, this)
+      .on("pointerover", this.onPointerOver, this)
+      .on("pointerout", this.onPointerOut, this);
     this.sprite.interactive = true;
+    this.sprite.buttonMode = true;
     this.addChild(this.sprite);
 
     this.text = new Text(this.name, textStyle);
@@ -91,8 +93,7 @@ class Pokemon extends Container {
   }
 
   private onPointerOver(e: InteractionEvent): void {
-    this.text.x = this.width / 2;
-    this.text.y = this.height;
+    this.text.position.set(this.width / 2, this.height);
     this.text.anchor.set(0.5, 0);
     this.addChild(this.text);
   }
@@ -186,18 +187,15 @@ function EventCommunication() {
     const pokeContainer = new Container();
 
     const charmander = Pokedex.get("charmander");
-    charmander.x = 0;
-    charmander.y = 0;
+    charmander.position.set(0, 0);
     pokeContainer.addChild(charmander);
 
     const squirtle = Pokedex.get("squirtle");
-    squirtle.x = 300;
-    squirtle.y = 0;
+    squirtle.position.set(300, 0);
     pokeContainer.addChild(squirtle);
 
     const bulbasaur = Pokedex.get("bulbasaur");
-    bulbasaur.x = 600;
-    bulbasaur.y = 0;
+    bulbasaur.position.set(600, 0);
     pokeContainer.addChild(bulbasaur);
 
     app.stage.addChild(pokeContainer);

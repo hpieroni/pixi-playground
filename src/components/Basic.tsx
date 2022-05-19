@@ -39,8 +39,7 @@ function Basic() {
     viewport.drag().pinch().wheel().decelerate();
 
     const sprite = Sprite.from("./logo192.png");
-    sprite.x = 0;
-    sprite.y = 0;
+    sprite.position.set(0, 0);
     viewport.addChild(sprite);
 
     setViewport(viewport);
