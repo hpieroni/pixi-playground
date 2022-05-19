@@ -16,6 +16,7 @@ const routes = [
   { to: "stress-test", text: "Stress Test" },
   { to: "event-communication", text: "Event Communication" },
   { to: "drag-drop", text: "Drag & Drop" },
+  { to: "resize", text: "Resize" },
 ];
 
 const Layout = () => (

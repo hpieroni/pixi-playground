@@ -5,68 +5,75 @@ import {
   InteractionData,
   InteractionEvent,
   Point,
-  DisplayObject,
 } from "pixi.js";
 import { drawerWidth } from "./Layout";
 
-class Rectangle extends Graphics {
+class Resizer extends Graphics {
   private dragging: boolean = false;
   private data: InteractionData | null = null;
-  private dragPointerStart?: DisplayObject;
-  private dragInitialPosition?: Point;
 
-  constructor(width: number, height: number, color: number) {
+  constructor() {
     super();
 
-    this.draw(width, height, color);
+    this.draw();
     this.initializeInteractions();
-    this.cursor = "grab";
   }
 
-  private draw(width: number, height: number, color: number) {
-    this.beginFill(color);
-    this.drawRect(0, 0, width, height);
-    this.endFill();
+  private draw() {
+    this.beginFill(0xecedf1).drawCircle(0, 0, 5).endFill();
   }
 
   private initializeInteractions() {
+    this.interactive = true;
+    this.cursor = "nwse-resize";
+
     this.on("pointerdown", this.onDragStart, this)
       .on("pointerup", this.onDragEnd, this)
       .on("pointerupoutside", this.onDragEnd, this)
       .on("pointermove", this.onDragMove, this);
-
-    this.interactive = true;
   }
 
   private onDragStart(event: InteractionEvent): void {
     this.data = event.data;
     this.dragging = true;
-    this.cursor = "grabbing";
-
-    this.dragPointerStart = event.data.getLocalPosition(this.parent);
-    this.dragInitialPosition = new Point().copyFrom(this.position);
   }
 
   private onDragEnd(e: InteractionEvent): void {
     this.data = null;
     this.dragging = false;
-    this.cursor = "grab";
   }
 
   private onDragMove(e: InteractionEvent): void {
     if (this.dragging) {
-      const currentPointer = this.data!.getLocalPosition(this.parent);
-      this.position.set(
-        this.dragInitialPosition!.x +
-          (currentPointer.x - this.dragPointerStart!.x),
-        this.dragInitialPosition!.y +
-          (currentPointer.y - this.dragPointerStart!.y)
-      );
+      const currentPosition = this.data!.getLocalPosition(this.parent);
+      (this.parent as Rectangle).resize(currentPosition);
+      this.position.set(currentPosition.x, currentPosition.y);
     }
   }
 }
 
-function DragAndDrop() {
+class Rectangle extends Graphics {
+  constructor(width: number, height: number) {
+    super();
+
+    this.draw(width, height);
+
+    const resizer = new Resizer();
+    resizer.position.set(this.width, this.height);
+    this.addChild(resizer);
+  }
+
+  private draw(width: number, height: number) {
+    this.lineStyle(4, 0xea1e63, 1).drawRect(0, 0, width, height);
+  }
+
+  public resize(position: Point) {
+    this.clear();
+    this.draw(position.x, position.y);
+  }
+}
+
+function Resize() {
   const containerRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -82,13 +89,9 @@ function DragAndDrop() {
       height,
     });
 
-    const rect1 = new Rectangle(100, 100, 0xea1e63);
-    rect1.position.set(20, 20);
-    app.stage.addChild(rect1);
-
-    const rect2 = new Rectangle(100, 50, 0xecedf1);
-    rect2.position.set(300, 100);
-    app.stage.addChild(rect2);
+    const rectangle = new Rectangle(300, 200);
+    rectangle.position.set(300, 200);
+    app.stage.addChild(rectangle);
 
     return () => app.destroy();
   }, []);
@@ -96,4 +99,4 @@ function DragAndDrop() {
   return <canvas ref={containerRef} />;
 }
 
-export default DragAndDrop;
+export default Resize;

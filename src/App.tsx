@@ -6,6 +6,7 @@ import Basic from "./components/Basic";
 import StressTest from "./components/StressTest";
 import EventCommunication from "./components/EventCommunication";
 import DragAndDrop from "./components/DragAndDrop";
+import Resize from "./components/Resize";
 
 const theme = createTheme({
   palette: {
@@ -24,6 +25,7 @@ function App() {
             <Route path="basic" element={<Basic />} />
             <Route path="stress-test" element={<StressTest />} />
             <Route path="drag-drop" element={<DragAndDrop />} />
+            <Route path="resize" element={<Resize />} />
             <Route
               path="event-communication"
               element={<EventCommunication />}
