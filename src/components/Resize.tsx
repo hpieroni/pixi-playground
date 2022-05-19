@@ -93,7 +93,7 @@ function Resize() {
     rectangle.position.set(300, 200);
     app.stage.addChild(rectangle);
 
-    return () => app.destroy();
+    return () => app.destroy(false, { children: true });
   }, []);
 
   return <canvas ref={containerRef} />;

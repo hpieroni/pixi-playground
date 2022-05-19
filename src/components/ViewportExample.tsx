@@ -6,7 +6,7 @@ import { drawerWidth } from "./Layout";
 
 const toolbarHeight = 64;
 
-function Basic() {
+function ViewportExample() {
   const containerRef = useRef<HTMLCanvasElement>(null);
   const [viewport, setViewport] = useState<Viewport>();
   const [plugins, setPlugins] = useState({ drag: true, wheel: true });
@@ -44,7 +44,7 @@ function Basic() {
 
     setViewport(viewport);
 
-    return () => app.destroy();
+    return () => app.destroy(false, { children: true });
   }, []);
 
   const changePlugin = (name: string, value: boolean) => {
@@ -97,4 +97,4 @@ function Basic() {
   );
 }
 
-export default Basic;
+export default ViewportExample;

@@ -12,7 +12,7 @@ import {
 export const drawerWidth = 240;
 
 const routes = [
-  { to: "basic", text: "Basic Example" },
+  { to: "viewport", text: "Viewport" },
   { to: "stress-test", text: "Stress Test" },
   { to: "event-communication", text: "Event Communication" },
   { to: "drag-drop", text: "Drag & Drop" },

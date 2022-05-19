@@ -82,7 +82,7 @@ function StressTest() {
       });
     }
 
-    return () => app.destroy();
+    return () => app.destroy(false, { children: true });
   }, [numberOfElements, fit, cull]);
 
   const handleChangeNumberOfElements = (

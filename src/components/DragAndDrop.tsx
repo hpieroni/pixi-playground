@@ -90,7 +90,7 @@ function DragAndDrop() {
     rect2.position.set(300, 100);
     app.stage.addChild(rect2);
 
-    return () => app.destroy();
+    return () => app.destroy(false, { children: true });
   }, []);
 
   return <canvas ref={containerRef} />;

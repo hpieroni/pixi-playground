@@ -2,7 +2,7 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { CssBaseline } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Layout from "./components/Layout";
-import Basic from "./components/Basic";
+import ViewportExample from "./components/ViewportExample";
 import StressTest from "./components/StressTest";
 import EventCommunication from "./components/EventCommunication";
 import DragAndDrop from "./components/DragAndDrop";
@@ -21,8 +21,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<Basic />} />
-            <Route path="basic" element={<Basic />} />
+            <Route index element={<ViewportExample />} />
+            <Route path="viewport" element={<ViewportExample />} />
             <Route path="stress-test" element={<StressTest />} />
             <Route path="drag-drop" element={<DragAndDrop />} />
             <Route path="resize" element={<Resize />} />
