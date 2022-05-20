@@ -14,9 +14,9 @@ export const drawerWidth = 240;
 const routes = [
   { to: "viewport", text: "Viewport" },
   { to: "stress-test", text: "Stress Test" },
-  { to: "event-communication", text: "Event Communication" },
   { to: "drag-drop", text: "Drag & Drop" },
   { to: "resize", text: "Resize" },
+  { to: "event-communication", text: "Event Communication" },
 ];
 
 const Layout = () => (
