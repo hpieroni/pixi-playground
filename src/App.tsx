@@ -20,7 +20,7 @@ function App() {
       <CssBaseline />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Layout />}>
+          <Route path="/pixi-playground" element={<Layout />}>
             <Route index element={<ViewportExample />} />
             <Route path="viewport" element={<ViewportExample />} />
             <Route path="stress-test" element={<StressTest />} />
