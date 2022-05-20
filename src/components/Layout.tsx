@@ -9,7 +9,7 @@ import {
   Toolbar,
 } from "@mui/material";
 
-export const drawerWidth = 240;
+const drawerWidth = 240;
 
 const routes = [
   { to: "viewport", text: "Viewport" },

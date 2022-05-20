@@ -1,33 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import { Application, Sprite } from "pixi.js";
 import { Viewport } from "pixi-viewport";
-import { Checkbox, FormControlLabel, Toolbar } from "@mui/material";
-import { drawerWidth } from "./Layout";
-
-const toolbarHeight = 64;
+import { Box, Checkbox, FormControlLabel, Toolbar } from "@mui/material";
 
 function ViewportExample() {
-  const containerRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [viewport, setViewport] = useState<Viewport>();
   const [plugins, setPlugins] = useState({ drag: true, wheel: true });
 
   useEffect(() => {
-    const width = window.innerWidth - drawerWidth;
-    const height = window.innerHeight - toolbarHeight;
-
     const app = new Application({
-      view: containerRef?.current as HTMLCanvasElement,
+      view: canvasRef?.current as HTMLCanvasElement,
       resolution: window.devicePixelRatio || 1,
       autoDensity: true,
       backgroundColor: 0x2c2c31,
-      width,
-      height,
+      resizeTo: containerRef?.current as HTMLElement,
     });
 
     // create viewport
     const viewport = new Viewport({
-      screenWidth: width,
-      screenHeight: height,
+      // screenWidth: width,
+      // screenHeight: height,
       // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
       interaction: app.renderer.plugins.interaction,
     });
@@ -64,7 +58,7 @@ function ViewportExample() {
   };
 
   return (
-    <>
+    <Box ref={containerRef} width="100%" height="100vh" overflow="hidden">
       <Toolbar
         sx={{
           backgroundColor: "#ffffff17",
@@ -92,8 +86,9 @@ function ViewportExample() {
           }
         />
       </Toolbar>
-      <canvas ref={containerRef} />
-    </>
+
+      <canvas ref={canvasRef} />
+    </Box>
   );
 }
 

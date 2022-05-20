@@ -20,7 +20,6 @@ import {
   Typography,
 } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
-import { drawerWidth } from "./Layout";
 
 interface PokemonSpec {
   name: string;
@@ -259,23 +258,20 @@ function PokemonDetails({
 }
 
 function EventCommunication() {
-  const containerRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [openSidePanel, setOpenSidePanel] = useState(false);
   const [selectedPokemonSpec, setSelectedPokemonSpec] = useState<PokemonSpec>();
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    const width = window.innerWidth - drawerWidth;
-    const height = window.innerHeight;
-
     const app = new Application({
-      view: containerRef?.current as HTMLCanvasElement,
+      view: canvasRef?.current as HTMLCanvasElement,
       resolution: window.devicePixelRatio || 1,
       autoDensity: true,
       backgroundColor: 0x2c2c31,
-      width,
-      height,
+      resizeTo: containerRef?.current as HTMLElement,
     });
 
     const pokemonContainer = new Container();
@@ -337,7 +333,7 @@ function EventCommunication() {
   };
 
   return (
-    <>
+    <Box ref={containerRef} width="100%" height="100vh" overflow="hidden">
       <PokemonDetails
         pokemonSpec={selectedPokemonSpec}
         open={openSidePanel}
@@ -358,8 +354,8 @@ function EventCommunication() {
           <MenuItem onClick={handleKill}>Kill</MenuItem>
         </MenuList>
       </Popover>
-      <canvas ref={containerRef} />
-    </>
+      <canvas ref={canvasRef} />
+    </Box>
   );
 }
 

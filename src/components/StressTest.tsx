@@ -3,6 +3,7 @@ import { Application, Sprite, Ticker } from "pixi.js";
 import { Viewport } from "pixi-viewport";
 import { Simple } from "pixi-cull";
 import {
+  Box,
   Checkbox,
   FormControlLabel,
   MenuItem,
@@ -10,9 +11,6 @@ import {
   TextField,
   Toolbar,
 } from "@mui/material";
-import { drawerWidth } from "./Layout";
-
-const toolbarHeight = 64;
 
 const numberOfElementsOptions = [
   100, 500, 1_000, 5_000, 10_000, 50_000, 100_000, 250_000, 500_000, 1_000_000,
@@ -22,27 +20,22 @@ const formatNumber = (n: number) => new Intl.NumberFormat().format(n);
 
 function StressTest() {
   const containerRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [numberOfElements, setNumberOfElements] = useState(100);
   const [fit, setFit] = useState(true);
   const [cull, setCull] = useState(false);
 
   useEffect(() => {
-    const width = window.innerWidth - drawerWidth;
-    const height = window.innerHeight - toolbarHeight;
-
     const app = new Application({
-      view: containerRef?.current as HTMLCanvasElement,
+      view: canvasRef?.current as HTMLCanvasElement,
       resolution: window.devicePixelRatio || 1,
       autoDensity: true,
       backgroundColor: 0x2c2c31,
-      width,
-      height,
+      resizeTo: containerRef?.current as HTMLElement,
     });
 
     // create viewport
     const viewport = new Viewport({
-      screenWidth: width,
-      screenHeight: height,
       // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
       interaction: app.renderer.plugins.interaction,
     });
@@ -100,7 +93,7 @@ function StressTest() {
   };
 
   return (
-    <>
+    <Box ref={containerRef} width="100%" height="100vh" overflow="hidden">
       <Toolbar
         sx={{
           backgroundColor: "#ffffff17",
@@ -132,8 +125,8 @@ function StressTest() {
           />
         </Stack>
       </Toolbar>
-      <canvas ref={containerRef} />
-    </>
+      <canvas ref={canvasRef} />
+    </Box>
   );
 }
 

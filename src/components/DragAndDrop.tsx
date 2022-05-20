@@ -7,7 +7,7 @@ import {
   Point,
   DisplayObject,
 } from "pixi.js";
-import { drawerWidth } from "./Layout";
+import { Box } from "@mui/material";
 
 class Rectangle extends Graphics {
   private dragging: boolean = false;
@@ -67,19 +67,16 @@ class Rectangle extends Graphics {
 }
 
 function DragAndDrop() {
-  const containerRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const width = window.innerWidth - drawerWidth;
-    const height = window.innerHeight;
-
     const app = new Application({
-      view: containerRef?.current as HTMLCanvasElement,
+      view: canvasRef?.current as HTMLCanvasElement,
       resolution: window.devicePixelRatio || 1,
       autoDensity: true,
       backgroundColor: 0x2c2c31,
-      width,
-      height,
+      resizeTo: containerRef?.current as HTMLElement,
     });
 
     const rect1 = new Rectangle(100, 100, 0xea1e63);
@@ -93,7 +90,11 @@ function DragAndDrop() {
     return () => app.destroy(false, { children: true });
   }, []);
 
-  return <canvas ref={containerRef} />;
+  return (
+    <Box ref={containerRef} width="100%" height="100vh" overflow="hidden">
+      <canvas ref={canvasRef} />
+    </Box>
+  );
 }
 
 export default DragAndDrop;
