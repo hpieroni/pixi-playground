@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Application, Sprite } from "pixi.js";
+import { Application, Texture, Sprite } from "pixi.js";
 import { Viewport } from "pixi-viewport";
 import { Box, Checkbox, FormControlLabel, Toolbar } from "@mui/material";
 
@@ -29,11 +29,11 @@ function ViewportExample() {
     // add the viewport to the stage
     app.stage.addChild(viewport);
 
-    // activate plugins
+    // activate plugins - this could be configurable
     viewport.drag().pinch().wheel().decelerate();
 
     const sprite = Sprite.from("./logo192.png");
-    sprite.position.set(0, 0);
+    // sprite.position.set(0, 0);
     viewport.addChild(sprite);
 
     setViewport(viewport);

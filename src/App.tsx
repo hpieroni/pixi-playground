@@ -2,11 +2,12 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { CssBaseline } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Layout from "./components/Layout";
-import ViewportExample from "./components/ViewportExample";
+import Viewport from "./components/Viewport";
 import StressTest from "./components/StressTest";
 import EventCommunication from "./components/EventCommunication";
 import DragAndDrop from "./components/DragAndDrop";
 import Resize from "./components/Resize";
+import PixiLayout from "./components/PixiLayout";
 
 const theme = createTheme({
   palette: {
@@ -21,8 +22,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/pixi-playground" element={<Layout />}>
-            <Route index element={<ViewportExample />} />
-            <Route path="viewport" element={<ViewportExample />} />
+            <Route index element={<Viewport />} />
+            <Route path="viewport" element={<Viewport />} />
             <Route path="stress-test" element={<StressTest />} />
             <Route path="drag-drop" element={<DragAndDrop />} />
             <Route path="resize" element={<Resize />} />
@@ -30,6 +31,7 @@ function App() {
               path="event-communication"
               element={<EventCommunication />}
             />
+            <Route path="layout" element={<PixiLayout />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>

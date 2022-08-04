@@ -1,0 +1,133 @@
+{
+  "type": "root",
+  "children": [
+    {
+      "type": "column",
+      "children": [
+        {
+          "label": "column 1",
+          "type": "node"
+        },
+        {
+          "label": "column 2",
+          "type": "node"
+        }
+      ]
+    },
+    {
+      "type": "row",
+      "children": [
+        {
+          "label": "row 1",
+          "type": "node"
+        },
+        {
+          "label": "row 2",
+          "type": "node"
+        }
+      ]
+    },
+    {
+      "type": "row-box",
+      "children": [
+        {
+          "label": "row 1",
+          "type": "node"
+        },
+        {
+          "label": "row 2",
+          "type": "node"
+        },
+        {
+          "label": "row 3",
+          "type": "node"
+        },
+        {
+          "label": "row 4",
+          "type": "node"
+        }
+      ]
+    },
+    {
+      "type": "grid-3",
+      "children": [
+        {
+          "label": "grid-3 1",
+          "type": "node"
+        },
+        {
+          "label": "grid-3 2",
+          "type": "node"
+        },
+        {
+          "label": "grid-3 3",
+          "type": "node"
+        },
+        {
+          "label": "grid-3 4",
+          "type": "node"
+        },
+        {
+          "label": "grid-3 6",
+          "type": "node"
+        }
+      ]
+    },
+    {
+      "label": "row",
+      "type": "row-box",
+      "children": [
+        {
+          "label": "grid-2",
+          "type": "grid-2",
+          "children": [
+            {
+              "label": "grid-2 1",
+              "type": "node"
+            },
+            {
+              "label": "grid-2 2",
+              "type": "node"
+            },
+            {
+              "label": "grid-2 3",
+              "type": "node"
+            },
+            {
+              "label": "grid-2 4",
+              "type": "node"
+            }
+          ]
+        },
+        {
+          "label": "grid-2",
+          "type": "grid-2",
+          "children": [
+            {
+              "label": "grid-2 1",
+              "type": "node"
+            },
+            {
+              "label": "grid-2 2",
+              "type": "node"
+            }
+          ]
+        },
+        {
+          "label": "column",
+          "type": "column-box",
+          "children": [
+            {
+              "label": "column 1",
+              "type": "node"
+            },
+            {
+              "label": "columns 2",
+              "type": "node"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
