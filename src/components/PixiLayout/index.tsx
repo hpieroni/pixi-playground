@@ -9,27 +9,23 @@ function PixiLayout() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const app = new PixiRenderer({
+    const renderer = new PixiRenderer({
       app: {
         view: canvasRef.current as HTMLCanvasElement,
         resizeTo: containerRef.current as HTMLElement,
+        backgroundColor: 0x2c2c31,
+      },
+      viewport: {
+        plugins: ["drag", "pinch", "wheel", "decelerate"],
       },
     });
 
-    app.render(new Diagram(data));
-    return () => app.destroy();
+    renderer.render(new Diagram(data));
+    return () => renderer.destroy();
   }, []);
 
   return (
-    <Box
-      ref={containerRef}
-      sx={{
-        width: "100%",
-        height: "100vh",
-        overflow: "hidden",
-        backgroundColor: "#2c2c31",
-      }}
-    >
+    <Box ref={containerRef} width="100%" height="100vh" overflow="hidden">
       <canvas ref={canvasRef} />
     </Box>
   );

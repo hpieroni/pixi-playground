@@ -1,12 +1,7 @@
 import { useEffect, useRef } from "react";
-import {
-  Application,
-  Graphics,
-  InteractionData,
-  InteractionEvent,
-  Point,
-} from "pixi.js";
+import { Graphics, InteractionData, InteractionEvent, Point } from "pixi.js";
 import { Box } from "@mui/material";
+import PixiRenderer from "../pixi/PixiRenderer";
 
 class Resizer extends Graphics {
   private dragging: boolean = false;
@@ -78,19 +73,20 @@ function Resize() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const app = new Application({
-      view: canvasRef?.current as HTMLCanvasElement,
-      resolution: window.devicePixelRatio || 1,
-      autoDensity: true,
-      backgroundColor: 0x2c2c31,
-      resizeTo: containerRef?.current as HTMLElement,
+    const renderer = new PixiRenderer({
+      app: {
+        view: canvasRef?.current as HTMLCanvasElement,
+        resizeTo: containerRef?.current as HTMLElement,
+        backgroundColor: 0x2c2c31,
+      },
     });
 
     const rectangle = new Rectangle(300, 200);
     rectangle.position.set(300, 200);
-    app.stage.addChild(rectangle);
 
-    return () => app.destroy(false, { children: true });
+    renderer.render(rectangle);
+
+    return () => renderer.destroy();
   }, []);
 
   return (

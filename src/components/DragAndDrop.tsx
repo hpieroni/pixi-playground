@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import {
-  Application,
   Graphics,
   InteractionData,
   InteractionEvent,
@@ -8,6 +7,7 @@ import {
   DisplayObject,
 } from "pixi.js";
 import { Box } from "@mui/material";
+import PixiRenderer from "../pixi/PixiRenderer";
 
 class Rectangle extends Graphics {
   private dragging: boolean = false;
@@ -71,23 +71,23 @@ function DragAndDrop() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const app = new Application({
-      view: canvasRef?.current as HTMLCanvasElement,
-      resolution: window.devicePixelRatio || 1,
-      autoDensity: true,
-      backgroundColor: 0x2c2c31,
-      resizeTo: containerRef?.current as HTMLElement,
+    const renderer = new PixiRenderer({
+      app: {
+        view: canvasRef?.current as HTMLCanvasElement,
+        resizeTo: containerRef?.current as HTMLElement,
+        backgroundColor: 0x2c2c31,
+      },
     });
 
     const rect1 = new Rectangle(100, 100, 0xea1e63);
     rect1.position.set(20, 20);
-    app.stage.addChild(rect1);
 
     const rect2 = new Rectangle(100, 50, 0xecedf1);
     rect2.position.set(300, 100);
-    app.stage.addChild(rect2);
 
-    return () => app.destroy(false, { children: true });
+    renderer.render([rect1, rect2]);
+
+    return () => renderer.destroy();
   }, []);
 
   return (

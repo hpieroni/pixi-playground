@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  Application,
   Container,
   Sprite,
   InteractionEvent,
@@ -20,6 +19,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
+import PixiRenderer from "../pixi/PixiRenderer";
 
 interface PokemonSpec {
   name: string;
@@ -266,12 +266,12 @@ function EventCommunication() {
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    const app = new Application({
-      view: canvasRef?.current as HTMLCanvasElement,
-      resolution: window.devicePixelRatio || 1,
-      autoDensity: true,
-      backgroundColor: 0x2c2c31,
-      resizeTo: containerRef?.current as HTMLElement,
+    const renderer = new PixiRenderer({
+      app: {
+        view: canvasRef?.current as HTMLCanvasElement,
+        backgroundColor: 0x2c2c31,
+        resizeTo: containerRef?.current as HTMLElement,
+      },
     });
 
     const pokemonContainer = new Container();
@@ -289,9 +289,9 @@ function EventCommunication() {
     bulbasaur.position.set(600, 0);
     pokemonContainer.addChild(bulbasaur);
 
-    app.stage.addChild(pokemonContainer);
+    renderer.render(pokemonContainer);
 
-    return () => app.destroy(false, { children: true });
+    return () => renderer.destroy();
   }, []);
 
   useEffect(() => {

@@ -6,7 +6,6 @@ import {
 } from "pixi.js";
 import { Viewport, type IViewportOptions } from "pixi-viewport";
 import { Simple } from "pixi-cull";
-
 interface PixiRendererOptions {
   app: IApplicationOptions;
   viewport?: IViewportOptions & {
@@ -16,39 +15,33 @@ interface PixiRendererOptions {
 }
 
 class PixiRenderer {
+  private options: PixiRendererOptions;
   private app: Application;
   private viewport: Viewport;
 
   constructor(options: PixiRendererOptions) {
-    this.app = new Application({
+    const appOptions = {
       autoStart: false,
       autoDensity: true,
-      backgroundAlpha: 0,
       resolution: window.devicePixelRatio ?? 1,
       ...options.app,
-    });
+    };
+    this.app = new Application(appOptions);
 
-    const {
-      plugins,
-      culling = true,
-      ...viewportOptions
-    } = options.viewport ?? {};
-
-    this.viewport = new Viewport({
+    const viewportOptions = {
+      culling: false,
       // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
       interaction: this.app.renderer.plugins.interaction,
-      ...viewportOptions,
-    });
+      ...options.viewport,
+    };
+    this.viewport = new Viewport(viewportOptions);
 
-    const defaultPlugins = ["drag", "pinch", "wheel", "decelerate"];
-    this.resumePlugin(...(plugins ?? defaultPlugins));
-
-    if (culling) {
-      this.enableCulling();
-    }
+    this.options = { app: appOptions, viewport: viewportOptions };
+    this.resumePlugin(...(viewportOptions.plugins ?? []));
   }
 
   private enableCulling() {
+    // TODO: Review. It's not working when a container wraps all the objects
     const simpleCull = new Simple();
     simpleCull.addList(this.viewport.children);
     simpleCull.cull(this.viewport.getVisibleBounds());
@@ -78,16 +71,31 @@ class PixiRenderer {
     plugins.forEach((name) => this.viewport.plugins.pause(name));
   }
 
-  public render(...displayObjects: DisplayObject[]) {
-    this.viewport.addChild(...displayObjects);
+  public fit() {
+    this.viewport.fit();
+  }
+
+  public render(displayObject: DisplayObject[] | DisplayObject) {
+    const displayObjects = Array.isArray(displayObject)
+      ? displayObject
+      : [displayObject];
+
+    for (const object of displayObjects) {
+      this.viewport.addChild(object);
+    }
     // Add the viewport to the stage
     this.app.stage.addChild(this.viewport);
+
+    if (this.options.viewport?.culling) {
+      this.enableCulling();
+    }
+
     // Need to start manually because `autoStart` option was set to `false`
     this.app.start();
   }
 
   public destroy() {
-    this.app?.destroy(false, { children: true });
+    this.app.destroy(false, { children: true });
   }
 }
 

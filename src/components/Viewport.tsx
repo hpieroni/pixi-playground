@@ -1,44 +1,30 @@
 import { useEffect, useRef, useState } from "react";
-import { Application, Texture, Sprite } from "pixi.js";
-import { Viewport } from "pixi-viewport";
+import { Sprite } from "pixi.js";
+import PixiRenderer from "../pixi/PixiRenderer";
 import { Box, Checkbox, FormControlLabel, Toolbar } from "@mui/material";
 
 function ViewportExample() {
   const containerRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [viewport, setViewport] = useState<Viewport>();
+  const [renderer, setRenderer] = useState<PixiRenderer>();
   const [plugins, setPlugins] = useState({ drag: true, wheel: true });
 
   useEffect(() => {
-    const app = new Application({
-      view: canvasRef?.current as HTMLCanvasElement,
-      resolution: window.devicePixelRatio || 1,
-      autoDensity: true,
-      backgroundColor: 0x2c2c31,
-      resizeTo: containerRef?.current as HTMLElement,
+    const renderer = new PixiRenderer({
+      app: {
+        view: canvasRef?.current as HTMLCanvasElement,
+        resizeTo: containerRef?.current as HTMLElement,
+        backgroundColor: 0x2c2c31,
+      },
+      viewport: {
+        plugins: ["drag", "pinch", "wheel", "decelerate"],
+      },
     });
 
-    // create viewport
-    const viewport = new Viewport({
-      // screenWidth: width,
-      // screenHeight: height,
-      // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
-      interaction: app.renderer.plugins.interaction,
-    });
+    setRenderer(renderer);
+    renderer.render(Sprite.from("./logo192.png"));
 
-    // add the viewport to the stage
-    app.stage.addChild(viewport);
-
-    // activate plugins - this could be configurable
-    viewport.drag().pinch().wheel().decelerate();
-
-    const sprite = Sprite.from("./logo192.png");
-    // sprite.position.set(0, 0);
-    viewport.addChild(sprite);
-
-    setViewport(viewport);
-
-    return () => app.destroy(false, { children: true });
+    return () => renderer.destroy();
   }, []);
 
   const changePlugin = (name: string, value: boolean) => {
@@ -47,9 +33,9 @@ function ViewportExample() {
       [name]: value,
     });
     if (value) {
-      viewport?.plugins.resume(name);
+      renderer?.resumePlugin(name);
     } else {
-      viewport?.plugins.pause(name);
+      renderer?.pausePlugin(name);
     }
   };
 
