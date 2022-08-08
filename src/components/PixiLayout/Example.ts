@@ -37,7 +37,7 @@ class Group extends Container {
 
   private buildContent() {
     const children = this.convertChildren();
-    const { type, border, padding, ...options } = this.options();
+    const { type, border, padding, background, ...options } = this.options();
 
     let content;
     switch (type) {
@@ -53,7 +53,7 @@ class Group extends Container {
         break;
     }
 
-    return new BoxContainer([content], { border, padding });
+    return new BoxContainer([content], { border, padding, background });
   }
 
   private convertChildren() {

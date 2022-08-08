@@ -4,6 +4,10 @@ import BorderBox, { type BorderConfig } from "./BorderBox";
 export interface BoxContainerOptions {
   border?: BorderConfig;
   padding?: number;
+  background?: {
+    color: number;
+    alpha?: number;
+  };
 }
 
 class BoxContainer extends Container {
@@ -14,6 +18,7 @@ class BoxContainer extends Container {
 
     const padding = options?.padding ?? 0;
     const borderWidth = options?.border?.width ?? 0;
+    const backgroundColor = options?.background?.color;
 
     this.content = new Container();
     this.content.addChild(...children);
@@ -22,7 +27,13 @@ class BoxContainer extends Container {
     const height = this.content.height + borderWidth * 2 + padding * 2;
 
     const box = new Graphics();
+    box.beginFill(
+      backgroundColor,
+      backgroundColor ? options?.background?.alpha : 0
+    );
     box.drawRect(0, 0, width, height);
+    box.endFill();
+
     this.addChild(box);
 
     this.content.x = padding + borderWidth;
