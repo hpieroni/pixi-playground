@@ -3,56 +3,102 @@ import {
   DisplayObject,
   Ticker,
   type IApplicationOptions,
+  type TickerCallback,
 } from "pixi.js";
 import { Viewport, type IViewportOptions } from "pixi-viewport";
 import { Simple } from "pixi-cull";
-interface PixiRendererOptions {
-  app: IApplicationOptions;
-  viewport?: IViewportOptions & {
-    plugins?: string[];
-    culling?: boolean;
-  };
+
+interface RenderOptions {
+  plugins?: string[];
+  fit?: boolean;
+  culling?: boolean;
 }
 
 class PixiRenderer {
-  private options: PixiRendererOptions;
   private app: Application;
   private viewport: Viewport;
+  private cullingHandler?: TickerCallback<PixiRenderer>;
 
-  constructor(options: PixiRendererOptions) {
-    const appOptions = {
+  constructor(
+    applicationOptions: IApplicationOptions,
+    viewportOptions: IViewportOptions = {}
+  ) {
+    this.app = new Application({
       autoStart: false,
       autoDensity: true,
       resolution: window.devicePixelRatio ?? 1,
-      ...options.app,
-    };
-    this.app = new Application(appOptions);
+      ...applicationOptions,
+    });
 
-    const viewportOptions = {
-      culling: false,
+    this.viewport = new Viewport({
+      screenWidth: this.app.screen.width,
+      screenHeight: this.app.screen.height,
       // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
       interaction: this.app.renderer.plugins.interaction,
-      ...options.viewport,
-    };
-    this.viewport = new Viewport(viewportOptions);
-
-    this.options = { app: appOptions, viewport: viewportOptions };
-    this.resumePlugin(...(viewportOptions.plugins ?? []));
+      ...viewportOptions,
+    });
   }
 
-  private enableCulling() {
+  public render(
+    displayObject: DisplayObject[] | DisplayObject,
+    options: RenderOptions = {}
+  ) {
+    this.resumePlugin(...(options.plugins ?? []));
+
+    const displayObjects = Array.isArray(displayObject)
+      ? displayObject
+      : [displayObject];
+
+    for (const object of displayObjects) {
+      this.viewport.addChild(object);
+    }
+    // Add the viewport to the stage
+    this.app.stage.addChild(this.viewport);
+
+    if (options.fit) {
+      this.fit();
+    }
+
+    if (options.culling) {
+      this.enableCulling();
+    }
+
+    // Need to start manually because `autoStart` option was set to `false`
+    this.app.start();
+  }
+
+  public destroy() {
+    this.app.destroy(false, { children: true });
+  }
+
+  public enableCulling() {
+    if (this.cullingHandler) {
+      return;
+    }
+
     // TODO: Review. It's not working when a container wraps all the objects
     const simpleCull = new Simple();
     simpleCull.addList(this.viewport.children);
     simpleCull.cull(this.viewport.getVisibleBounds());
 
     // cull whenever the viewport moves
-    Ticker.shared.add(() => {
+    this.cullingHandler = () => {
       if (this.viewport.dirty) {
         simpleCull.cull(this.viewport.getVisibleBounds());
         this.viewport.dirty = false;
       }
-    });
+    };
+
+    Ticker.shared.add(this.cullingHandler);
+  }
+
+  public disableCulling() {
+    if (this.cullingHandler) {
+      Ticker.shared.remove(this.cullingHandler);
+      delete this.cullingHandler;
+    }
+
+    this.makeAllVisible();
   }
 
   public resumePlugin(...plugins: string[]) {
@@ -72,30 +118,19 @@ class PixiRenderer {
   }
 
   public fit() {
+    this.viewport.left = 0;
+    this.viewport.top = 0;
+
+    if (this.cullingHandler) {
+      this.makeAllVisible();
+    }
     this.viewport.fit();
   }
 
-  public render(displayObject: DisplayObject[] | DisplayObject) {
-    const displayObjects = Array.isArray(displayObject)
-      ? displayObject
-      : [displayObject];
-
-    for (const object of displayObjects) {
-      this.viewport.addChild(object);
+  private makeAllVisible() {
+    for (const child of this.viewport.children) {
+      child.visible = true;
     }
-    // Add the viewport to the stage
-    this.app.stage.addChild(this.viewport);
-
-    if (this.options.viewport?.culling) {
-      this.enableCulling();
-    }
-
-    // Need to start manually because `autoStart` option was set to `false`
-    this.app.start();
-  }
-
-  public destroy() {
-    this.app.destroy(false, { children: true });
   }
 }
 

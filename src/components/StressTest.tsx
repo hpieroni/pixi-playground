@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { Container, Sprite } from "pixi.js";
+import { Sprite } from "pixi.js";
 import {
   Box,
+  Button,
   Checkbox,
   FormControlLabel,
   MenuItem,
@@ -9,6 +10,7 @@ import {
   TextField,
   Toolbar,
 } from "@mui/material";
+import FitScreenIcon from "@mui/icons-material/FitScreen";
 import PixiRenderer from "../pixi/PixiRenderer";
 
 const numberOfElementsOptions = [
@@ -21,21 +23,18 @@ function StressTest() {
   const containerRef = useRef<HTMLCanvasElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [numberOfElements, setNumberOfElements] = useState(100);
+  const [renderer, setRenderer] = useState<PixiRenderer>();
   const [fit, setFit] = useState(true);
   const [culling, setCulling] = useState(false);
 
   useEffect(() => {
     const renderer = new PixiRenderer({
-      app: {
-        view: canvasRef.current as HTMLCanvasElement,
-        resizeTo: containerRef.current as HTMLElement,
-        backgroundColor: 0x2c2c31,
-      },
-      viewport: {
-        plugins: ["drag", "pinch", "wheel", "decelerate"],
-        culling,
-      },
+      view: canvasRef.current as HTMLCanvasElement,
+      resizeTo: containerRef.current as HTMLElement,
+      backgroundColor: 0x2c2c31,
     });
+
+    setRenderer(renderer);
 
     const rows = Math.round(Math.sqrt(numberOfElements));
     const columns = rows;
@@ -49,14 +48,14 @@ function StressTest() {
       }
     }
 
-    renderer.render(elements);
-
-    if (fit) {
-      renderer.fit();
-    }
+    renderer.render(elements, {
+      plugins: ["drag", "pinch", "wheel", "decelerate"],
+      culling,
+      fit,
+    });
 
     return () => renderer.destroy();
-  }, [numberOfElements, fit, culling]);
+  }, [numberOfElements]);
 
   const handleChangeNumberOfElements = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -64,16 +63,22 @@ function StressTest() {
     setNumberOfElements(Number(event.target.value));
   };
 
-  const handleChangeFit = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFit(event.target.checked);
+  const handleFit = () => {
+    renderer?.fit();
   };
 
   const handleChangeCulling = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCulling(event.target.checked);
+    const cullingChecked = event.target.checked;
+    setCulling(cullingChecked);
+    if (cullingChecked) {
+      renderer?.enableCulling();
+    } else {
+      renderer?.disableCulling();
+    }
   };
 
   return (
-    <Box ref={containerRef} width="100%" height="100vh" overflow="hidden">
+    <Box height="100vh">
       <Toolbar
         sx={{
           backgroundColor: "#ffffff17",
@@ -95,10 +100,13 @@ function StressTest() {
               </MenuItem>
             ))}
           </TextField>
-          <FormControlLabel
-            label="Fit content"
-            control={<Checkbox checked={fit} onChange={handleChangeFit} />}
-          />
+          <Button
+            color="inherit"
+            startIcon={<FitScreenIcon />}
+            onClick={handleFit}
+          >
+            Fit content
+          </Button>
           <FormControlLabel
             label="Enable culling"
             control={
@@ -107,7 +115,9 @@ function StressTest() {
           />
         </Stack>
       </Toolbar>
-      <canvas ref={canvasRef} />
+      <Box height="calc(100% - 64px)" overflow="hidden" ref={containerRef}>
+        <canvas ref={canvasRef} />
+      </Box>
     </Box>
   );
 }

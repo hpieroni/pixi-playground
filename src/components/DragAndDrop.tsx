@@ -72,11 +72,9 @@ function DragAndDrop() {
 
   useEffect(() => {
     const renderer = new PixiRenderer({
-      app: {
-        view: canvasRef?.current as HTMLCanvasElement,
-        resizeTo: containerRef?.current as HTMLElement,
-        backgroundColor: 0x2c2c31,
-      },
+      view: canvasRef?.current as HTMLCanvasElement,
+      resizeTo: containerRef?.current as HTMLElement,
+      backgroundColor: 0x2c2c31,
     });
 
     const rect1 = new Rectangle(100, 100, 0xea1e63);

@@ -11,18 +11,15 @@ function ViewportExample() {
 
   useEffect(() => {
     const renderer = new PixiRenderer({
-      app: {
-        view: canvasRef?.current as HTMLCanvasElement,
-        resizeTo: containerRef?.current as HTMLElement,
-        backgroundColor: 0x2c2c31,
-      },
-      viewport: {
-        plugins: ["drag", "pinch", "wheel", "decelerate"],
-      },
+      view: canvasRef?.current as HTMLCanvasElement,
+      resizeTo: containerRef?.current as HTMLElement,
+      backgroundColor: 0x2c2c31,
     });
 
     setRenderer(renderer);
-    renderer.render(Sprite.from("./logo192.png"));
+    renderer.render(Sprite.from("./logo192.png"), {
+      plugins: ["drag", "pinch", "wheel", "decelerate"],
+    });
 
     return () => renderer.destroy();
   }, []);

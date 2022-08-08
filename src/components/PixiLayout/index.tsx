@@ -10,17 +10,15 @@ function PixiLayout() {
 
   useEffect(() => {
     const renderer = new PixiRenderer({
-      app: {
-        view: canvasRef.current as HTMLCanvasElement,
-        resizeTo: containerRef.current as HTMLElement,
-        backgroundColor: 0x2c2c31,
-      },
-      viewport: {
-        plugins: ["drag", "pinch", "wheel", "decelerate"],
-      },
+      view: canvasRef.current as HTMLCanvasElement,
+      resizeTo: containerRef.current as HTMLElement,
+      backgroundColor: 0x2c2c31,
     });
 
-    renderer.render(new Diagram(data));
+    renderer.render(new Diagram(data), {
+      plugins: ["drag", "pinch", "wheel", "decelerate"],
+    });
+
     return () => renderer.destroy();
   }, []);
 

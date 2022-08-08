@@ -267,11 +267,9 @@ function EventCommunication() {
 
   useEffect(() => {
     const renderer = new PixiRenderer({
-      app: {
-        view: canvasRef?.current as HTMLCanvasElement,
-        backgroundColor: 0x2c2c31,
-        resizeTo: containerRef?.current as HTMLElement,
-      },
+      view: canvasRef?.current as HTMLCanvasElement,
+      backgroundColor: 0x2c2c31,
+      resizeTo: containerRef?.current as HTMLElement,
     });
 
     const pokemonContainer = new Container();
