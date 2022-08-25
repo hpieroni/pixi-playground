@@ -116,7 +116,7 @@ const objectDefinitions: { [key: string]: ObjectDefinition } = {
       type: "column",
       spacing: 10,
       padding: 24,
-      border: { width: 4, color: 0xea1e63 },
+      border: { width: 4, color: 0xea1e63, radius: 8 },
     },
   },
   row: {
@@ -162,7 +162,7 @@ const objectDefinitions: { [key: string]: ObjectDefinition } = {
       spacing: 10,
       columns: 2,
       align: "center",
-      border: { width: 4, color: 0xea1e63 },
+      border: { width: 4, color: 0xea1e63, radius: 8 },
       padding: 24,
     },
   },

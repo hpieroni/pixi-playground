@@ -6,6 +6,7 @@ export interface BorderConfig {
   color?: number;
   alpha?: number;
   only?: Border;
+  radius?: number;
 }
 
 class BorderBox extends Graphics {
@@ -36,7 +37,13 @@ class BorderBox extends Graphics {
         this.lineTo(offset, dimension.height);
         break;
       default:
-        this.drawRect(offset, offset, dimension.width, dimension.height);
+        this.drawRoundedRect(
+          offset,
+          offset,
+          dimension.width,
+          dimension.height,
+          config.radius ?? 0
+        );
     }
   }
 }
