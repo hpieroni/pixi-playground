@@ -1,5 +1,4 @@
 import { Container, Graphics, Text, TextStyle } from "pixi.js";
-import BoxContainer from "../../pixi/BoxContainer";
 import Grid from "../../pixi/Grid";
 import List from "../../pixi/List";
 
@@ -38,22 +37,17 @@ class Group extends Container {
   private buildContent() {
     const children = this.convertChildren();
     const { type, border, padding, background, ...options } = this.options();
+    const style = { border, padding, background };
 
-    let content;
     switch (type) {
       case "grid":
-        content = new Grid(children, options);
-        break;
+        return new Grid(children, { ...options, style });
       case "row":
-        content = new List(children, { direction: "row", ...options });
-        break;
+        return new List(children, { direction: "row", ...options, style });
       case "column":
       default:
-        content = new List(children, options);
-        break;
+        return new List(children, { ...options, style });
     }
-
-    return new BoxContainer([content], { border, padding, background });
   }
 
   private convertChildren() {
@@ -116,7 +110,7 @@ const objectDefinitions: { [key: string]: ObjectDefinition } = {
       type: "column",
       spacing: 10,
       padding: 24,
-      border: { width: 4, color: 0xea1e63, radius: 8 },
+      border: { width: 4, color: 0xea1e63 },
     },
   },
   row: {
@@ -151,8 +145,8 @@ const objectDefinitions: { [key: string]: ObjectDefinition } = {
       spacing: 10,
       columns: 3,
       align: "center",
-      border: { width: 4, color: 0xea1e63 },
       padding: 24,
+      border: { width: 4, color: 0xea1e63 },
     },
   },
   "grid-2": {
@@ -162,8 +156,8 @@ const objectDefinitions: { [key: string]: ObjectDefinition } = {
       spacing: 10,
       columns: 2,
       align: "center",
-      border: { width: 4, color: 0xea1e63, radius: 8 },
       padding: 24,
+      border: { width: 4, color: 0xea1e63, radius: 8 },
     },
   },
   node: {
