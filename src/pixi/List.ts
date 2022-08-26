@@ -47,9 +47,7 @@ class List extends Container {
       alignElements(align, children, content);
     }
 
-    this.addChild(
-      options.style ? new BoxContainer(content, options.style) : content
-    );
+    this.addChild(new BoxContainer(content, options.style));
   }
 }
 
