@@ -1,3 +1,7 @@
+export function castArray<T>(value: T | T[]): T[] {
+  return Array.isArray(value) ? value : [value];
+}
+
 export function chunk<T>(arr: T[], size: number): T[][] {
   const result = [];
   for (let i = 0; i < arr.length; i += size) {

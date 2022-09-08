@@ -1,6 +1,6 @@
 import { Container } from "pixi.js";
 import { alignElements, chunk, type Alignment } from "./utils";
-import BoxContainer, { type StyleOptions } from "./BoxContainer";
+import Box, { type StyleOptions } from "./Box";
 
 export interface GridOptions {
   /**
@@ -16,7 +16,7 @@ export interface GridOptions {
    */
   align?: Alignment;
   /**
-   * BoxContainer syles options (padding, border, background)
+   * Box syles options (padding, border, background)
    */
   style?: StyleOptions;
 }
@@ -60,7 +60,7 @@ class Grid extends Container {
 
     alignElements(align, content.children as Container[], content);
 
-    this.addChild(new BoxContainer(content, options.style));
+    this.addChild(new Box(content, options.style));
   }
 }
 

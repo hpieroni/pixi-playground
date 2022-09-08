@@ -1,6 +1,6 @@
 import { Container } from "pixi.js";
 import { alignElements, type Alignment } from "./utils";
-import BoxContainer, { type StyleOptions } from "./BoxContainer";
+import Box, { type StyleOptions } from "./Box";
 
 export interface ListOptions {
   /**
@@ -17,7 +17,7 @@ export interface ListOptions {
    */
   align?: Alignment;
   /**
-   * BoxContainer syles options (padding, border, background)
+   * BoxC syles options (padding, border, background)
    */
   style?: StyleOptions;
 }
@@ -47,7 +47,7 @@ class List extends Container {
       alignElements(align, children, content);
     }
 
-    this.addChild(new BoxContainer(content, options.style));
+    this.addChild(new Box(content, options.style));
   }
 }
 
