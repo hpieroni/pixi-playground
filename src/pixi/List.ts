@@ -17,7 +17,7 @@ export interface ListOptions {
    */
   align?: Alignment;
   /**
-   * BoxC syles options (padding, border, background)
+   * Box syles options (padding, border, background)
    */
   style?: StyleOptions;
 }
