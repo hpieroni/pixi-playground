@@ -17,6 +17,7 @@ const routes = [
   { to: "drag-drop", text: "Drag & Drop" },
   { to: "resize", text: "Resize" },
   { to: "truncated-text", text: "Truncated Text" },
+  { to: "tooltip", text: "Tooltip" },
   { to: "event-communication", text: "Event Communication" },
   { to: "layout", text: "Layout" },
 ];

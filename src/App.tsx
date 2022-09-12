@@ -9,6 +9,7 @@ import DragAndDrop from "./components/DragAndDrop";
 import Resize from "./components/Resize";
 import PixiLayout from "./components/PixiLayout";
 import TruncatedText from "./components/TruncatedText";
+import Tooltip from "./components/Tooltip";
 
 const theme = createTheme({
   palette: {
@@ -29,6 +30,7 @@ function App() {
             <Route path="drag-drop" element={<DragAndDrop />} />
             <Route path="resize" element={<Resize />} />
             <Route path="truncated-text" element={<TruncatedText />} />
+            <Route path="tooltip" element={<Tooltip />} />
             <Route
               path="event-communication"
               element={<EventCommunication />}

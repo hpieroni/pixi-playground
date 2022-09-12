@@ -24,7 +24,6 @@ function StressTest() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [numberOfElements, setNumberOfElements] = useState(100);
   const [renderer, setRenderer] = useState<PixiRenderer>();
-  const [fit, setFit] = useState(true);
   const [culling, setCulling] = useState(false);
 
   useEffect(() => {
@@ -51,7 +50,7 @@ function StressTest() {
     renderer.render(elements, {
       plugins: ["drag", "pinch", "wheel", "decelerate"],
       culling,
-      fit,
+      fit: true,
     });
 
     return () => renderer.destroy();

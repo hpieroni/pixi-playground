@@ -1,4 +1,4 @@
-import { Container, Graphics } from "pixi.js";
+import { Container, DisplayObject, Graphics } from "pixi.js";
 import Border, { type BorderConfig } from "./Border";
 import { castArray } from "./utils";
 
@@ -14,37 +14,49 @@ export interface StyleOptions {
 }
 
 export class Box extends Container {
-  constructor(children: Container | Container[], options?: StyleOptions) {
+  constructor(
+    children: DisplayObject | DisplayObject[],
+    options?: StyleOptions
+  ) {
     super();
 
+    const padding = options?.padding ?? 0;
     const borderWidth = options?.border?.width ?? 0;
 
     const content = new Container();
     castArray(children).forEach((child) => content.addChild(child));
 
-    let width = Math.max(content.width, options?.minWidth ?? 0);
-    let height = Math.max(content.height, options?.minHeight ?? 0);
+    const width =
+      Math.max(content.width, options?.minWidth ?? 0) +
+      padding * 2 +
+      borderWidth * 2;
+    const height =
+      Math.max(content.height, options?.minHeight ?? 0) +
+      padding * 2 +
+      borderWidth * 2;
 
-    const padding = options?.padding ?? 0;
     if (padding > 0) {
-      width += padding * 2;
-      height += padding * 2;
       content.x = padding;
       content.y = padding;
       const paddingBox = new Graphics();
 
-      // We can't use alpha = 0 in `beginFill` because the box won't be drawn
-      // Using PIXI.filters.AlphaFilter degrades the performance a lot
-      // That is why I decided to use an alpha that is close to 0 (user won't notice the difference)
-      paddingBox.beginFill(
-        options?.background?.color,
-        options?.background?.alpha || 1e-10
-      );
+      if (options?.background) {
+        paddingBox.beginFill(
+          options.background.color,
+          options.background.alpha ?? 1
+        );
+      } else {
+        // We can't use alpha = 0 in `beginFill` because the box won't be drawn
+        // Using PIXI.filters.AlphaFilter degrades the performance a lot
+        // That is why I decided to use an alpha that is close to 0 (user won't notice the difference)
+        paddingBox.beginFill(0, 1e-10);
+      }
+
       paddingBox.drawRoundedRect(
         0,
         0,
-        width + borderWidth * 2,
-        height + borderWidth * 2,
+        width,
+        height,
         options?.border?.radius ?? 0
       );
       paddingBox.endFill();
