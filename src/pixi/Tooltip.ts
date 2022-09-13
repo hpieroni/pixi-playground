@@ -40,15 +40,15 @@ export interface TooltipOptions {
    */
   style?: StyleOptions;
   /**
-   * X offset between the tooltip and the pointer or the target
+   * Left offset between the tooltip and the pointer or the target
    * @default 0
    */
-  offsetX?: number;
+  offsetLeft?: number;
   /**
-   * Y offset between the tooltip and the pointer or the target
+   * Top offset between the tooltip and the pointer or the target
    * @default 0
    */
-  offsetY?: number;
+  offsetTop?: number;
   /**
    * This property will be used if a string is passed to the content property
    */
@@ -63,7 +63,7 @@ export interface TooltipOptions {
 
 class Tooltip extends Box {
   private target: Container;
-  private options?: TooltipOptions;
+  private options: TooltipOptions;
   private timeout?: number;
 
   constructor(
@@ -80,18 +80,22 @@ class Tooltip extends Box {
 
     this.target = target;
     this.options = {
-      offsetX: 0,
-      offsetY: 0,
+      offsetLeft: 0,
+      offsetTop: 0,
       delay: 0,
       position: TooltipPosition.BOTTOM_CENTER,
       positionTarget: TooltipPositionTarget.TARGET,
       ...options,
     };
 
+    this.initializeHover();
+  }
+
+  private initializeHover() {
     this.target.interactive = true;
 
     this.target.on("pointerover", (e: InteractionEvent): void => {
-      if (this.options?.delay) {
+      if (this.options.delay! > 0) {
         this.timeout = window.setTimeout(() => {
           this.setPosition(e);
           this.target.addChild(this);
@@ -111,7 +115,7 @@ class Tooltip extends Box {
   }
 
   private setPosition(e: InteractionEvent) {
-    if (this.options?.positionTarget === TooltipPositionTarget.TARGET) {
+    if (this.options.positionTarget === TooltipPositionTarget.TARGET) {
       this.setPositionOnTarget();
     } else {
       this.setPositionOnPointer(e);
@@ -121,7 +125,7 @@ class Tooltip extends Box {
   private setPositionOnPointer(e: InteractionEvent) {
     const position = e.data.getLocalPosition(this.target);
 
-    switch (this.options?.position) {
+    switch (this.options.position) {
       case TooltipPosition.TOP_LEFT:
         this.x = position.x - this.width;
         this.y = position.y - this.height;
@@ -159,10 +163,13 @@ class Tooltip extends Box {
         this.x = position.x;
         this.y = position.y;
     }
+
+    this.x += this.options.offsetLeft!;
+    this.y += this.options.offsetTop!;
   }
 
   private setPositionOnTarget() {
-    switch (this.options?.position) {
+    switch (this.options.position) {
       case TooltipPosition.TOP_LEFT:
         this.x = 0;
         this.y = -this.height;
@@ -200,6 +207,9 @@ class Tooltip extends Box {
         this.x = this.target.width - this.width;
         this.y = this.target.height;
     }
+
+    this.x += this.options.offsetLeft!;
+    this.y += this.options.offsetTop!;
   }
 }
 

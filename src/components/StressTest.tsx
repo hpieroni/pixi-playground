@@ -54,6 +54,7 @@ function StressTest() {
     });
 
     return () => renderer.destroy();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [numberOfElements]);
 
   const handleChangeNumberOfElements = (
