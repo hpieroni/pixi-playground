@@ -1,11 +1,12 @@
 import { useEffect, useRef } from "react";
 import { Box as MuiBox } from "@mui/material";
-import { Container, Text } from "pixi.js";
+import { Container, Graphics, Sprite, Text } from "pixi.js";
 import PixiRenderer from "../pixi/PixiRenderer";
 import Grid from "../pixi/Grid";
 import Box from "../pixi/Box";
+import List from "../pixi/List";
 import Tooltip, {
-  TooltipPosition,
+  TooltipPlacement,
   TooltipPositionTarget,
 } from "../pixi/Tooltip";
 
@@ -33,23 +34,23 @@ function TooltipExample() {
      * Tooltips with target positioning
      */
     const targetTooltipExample = new Container();
+    targetTooltipExample.x = 120;
+    targetTooltipExample.y = 50;
     const targetTooltipTitle = new Text("Target Tooltips", {
       fontSize: 24,
       fill: 0xffffff,
     });
     targetTooltipExample.addChild(targetTooltipTitle);
-    targetTooltipTitle.x = 120;
-    targetTooltipTitle.y = 50;
 
-    const targetTooltips = Object.values(TooltipPosition).map((position) => {
-      const text = new Text(position, { fontSize: 16, fill: 0xffffff });
+    const targetTooltips = Object.values(TooltipPlacement).map((placement) => {
+      const text = new Text(placement, { fontSize: 16, fill: 0xffffff });
       const box = new Box(text, {
         padding: 10,
         background: { color: 0x808080 },
         minWidth: 120,
       });
       new Tooltip(box, "I'm a tooltip", {
-        position,
+        placement,
         style: tooltipStyle,
         textStyle: { fontSize: 14, fill: 0xffffff },
       });
@@ -60,8 +61,7 @@ function TooltipExample() {
       columns: 3,
       spacing: 30,
     });
-    targetTooltipGrid.x = 120;
-    targetTooltipGrid.y = 100;
+    targetTooltipGrid.y = 50;
     targetTooltipExample.addChild(targetTooltipGrid);
     /* ************************ */
 
@@ -69,23 +69,23 @@ function TooltipExample() {
      * Tooltips with pointer positioning
      */
     const pointerTooltipExample = new Container();
+    pointerTooltipExample.x = 120;
+    pointerTooltipExample.y = 350;
     const pointerTooltipTitle = new Text("Pointer Tooltips", {
       fontSize: 24,
       fill: 0xffffff,
     });
     pointerTooltipExample.addChild(pointerTooltipTitle);
-    pointerTooltipTitle.x = 120;
-    pointerTooltipTitle.y = 350;
 
-    const pointerTooltips = Object.values(TooltipPosition).map((position) => {
-      const text = new Text(position, { fontSize: 16, fill: 0xffffff });
+    const pointerTooltips = Object.values(TooltipPlacement).map((placement) => {
+      const text = new Text(placement, { fontSize: 16, fill: 0xffffff });
       const box = new Box(text, {
         padding: 10,
         background: { color: 0x808080 },
         minWidth: 120,
       });
       new Tooltip(box, "I'm a tooltip", {
-        position,
+        placement,
         positionTarget: TooltipPositionTarget.POINTER,
         style: tooltipStyle,
         textStyle: { fontSize: 14, fill: 0xffffff },
@@ -97,8 +97,7 @@ function TooltipExample() {
       columns: 3,
       spacing: 30,
     });
-    pointerTooltipGrid.x = 120;
-    pointerTooltipGrid.y = 400;
+    pointerTooltipGrid.y = 50;
     pointerTooltipExample.addChild(pointerTooltipGrid);
     /* ************************ */
 
@@ -106,13 +105,13 @@ function TooltipExample() {
      * Tooltips with delay
      */
     const delayedTooltipExample = new Container();
+    delayedTooltipExample.x = 120;
+    delayedTooltipExample.y = 650;
     const delayedTooltipTitle = new Text("Delayed Tooltip", {
       fontSize: 24,
       fill: 0xffffff,
     });
     delayedTooltipExample.addChild(delayedTooltipTitle);
-    delayedTooltipTitle.x = 120;
-    delayedTooltipTitle.y = 650;
 
     const delayedTooltipTarget = new Box(
       new Text("Hover me (500ms)", { fontSize: 16, fill: 0xffffff }),
@@ -128,15 +127,62 @@ function TooltipExample() {
       delay: 500,
     });
 
-    delayedTooltipTarget.x = 120;
-    delayedTooltipTarget.y = 700;
+    delayedTooltipTarget.y = 50;
+
     delayedTooltipExample.addChild(delayedTooltipTarget);
+
+    /* ************************ */
+    /**
+     * Complex content
+     */
+    const complexTooltipExample = new Container();
+    complexTooltipExample.x = 350;
+    complexTooltipExample.y = 650;
+    const complexTooltipTitle = new Text("Complex Tooltip Content", {
+      fontSize: 24,
+      fill: 0xffffff,
+    });
+    complexTooltipExample.addChild(complexTooltipTitle);
+
+    const rect = new Graphics();
+    rect.lineStyle(10, 0xffbd01, 1);
+    rect.beginFill(0xc34288);
+    rect.drawRect(50, 50, 100, 100);
+    rect.endFill();
+    const complexContent = new List(
+      [
+        new Text("This is a title", {
+          fontWeight: "bold",
+          fontSize: 36,
+          fill: 0xffffff,
+        }),
+        rect,
+      ],
+      { spacing: 10 }
+    );
+    const complexTooltipTarget = new Box(
+      new Text("Hover me", { fontSize: 16, fill: 0xffffff }),
+      {
+        padding: 10,
+        background: { color: 0x808080 },
+        minWidth: 120,
+      }
+    );
+    complexTooltipTarget.y = 50;
+
+    new Tooltip(complexTooltipTarget, complexContent, {
+      style: tooltipStyle,
+      textStyle: { fontSize: 14, fill: 0xffffff },
+    });
+
+    complexTooltipExample.addChild(complexTooltipTarget);
     /* ************************ */
 
     renderer.render([
       targetTooltipExample,
       pointerTooltipExample,
       delayedTooltipExample,
+      complexTooltipExample,
     ]);
 
     return () => renderer.destroy();
