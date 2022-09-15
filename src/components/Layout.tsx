@@ -18,6 +18,7 @@ const routes = [
   { to: "resize", text: "Resize" },
   { to: "truncated-text", text: "Truncated Text" },
   { to: "tooltip", text: "Tooltip" },
+  { to: "hit-area", text: "Hit Area" },
   { to: "event-communication", text: "Event Communication" },
   { to: "layout", text: "Layout" },
 ];

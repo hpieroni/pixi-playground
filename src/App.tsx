@@ -10,6 +10,7 @@ import Resize from "./components/Resize";
 import PixiLayout from "./components/PixiLayout";
 import TruncatedText from "./components/TruncatedText";
 import Tooltip from "./components/Tooltip";
+import HitArea from "./components/HitArea";
 
 const theme = createTheme({
   palette: {
@@ -31,6 +32,7 @@ function App() {
             <Route path="resize" element={<Resize />} />
             <Route path="truncated-text" element={<TruncatedText />} />
             <Route path="tooltip" element={<Tooltip />} />
+            <Route path="hit-area" element={<HitArea />} />
             <Route
               path="event-communication"
               element={<EventCommunication />}
