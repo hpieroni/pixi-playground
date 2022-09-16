@@ -96,6 +96,7 @@ class Tooltip extends Box {
       options?.style
     );
 
+    this.visible = false;
     this.target = target;
     this.options = {
       offsetLeft: 0,
@@ -123,6 +124,7 @@ class Tooltip extends Box {
         this.scale.set(1 / currentScale.x, 1 / currentScale.y);
       }
 
+      this.visible = true;
       this.setPosition(e);
       this.target.addChild(this);
 
@@ -134,6 +136,12 @@ class Tooltip extends Box {
 
   hide() {
     window.clearTimeout(this.timeout);
+
+    if (!this.visible) {
+      return;
+    }
+
+    this.visible = false;
     this.target.removeChild(this);
 
     if (this.options.onHide) {
