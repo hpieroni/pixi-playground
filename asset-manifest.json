@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/pixi-playground/static/css/main.cfa08c2c.css",
-    "main.js": "/pixi-playground/static/js/main.bd8f1b26.js",
+    "main.js": "/pixi-playground/static/js/main.ddd9406b.js",
     "static/js/787.87659760.chunk.js": "/pixi-playground/static/js/787.87659760.chunk.js",
     "static/media/roboto-all-500-normal.woff": "/pixi-playground/static/media/roboto-all-500-normal.52cb737b682eb9661ee1.woff",
     "static/media/roboto-all-700-normal.woff": "/pixi-playground/static/media/roboto-all-700-normal.ef6d1d09b20b877fee4e.woff",
@@ -37,11 +37,11 @@
     "static/media/roboto-greek-ext-700-normal.woff2": "/pixi-playground/static/media/roboto-greek-ext-700-normal.9674bc0ae12c2551d9d1.woff2",
     "index.html": "/pixi-playground/index.html",
     "main.cfa08c2c.css.map": "/pixi-playground/static/css/main.cfa08c2c.css.map",
-    "main.bd8f1b26.js.map": "/pixi-playground/static/js/main.bd8f1b26.js.map",
+    "main.ddd9406b.js.map": "/pixi-playground/static/js/main.ddd9406b.js.map",
     "787.87659760.chunk.js.map": "/pixi-playground/static/js/787.87659760.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.cfa08c2c.css",
-    "static/js/main.bd8f1b26.js"
+    "static/js/main.ddd9406b.js"
   ]
 }
