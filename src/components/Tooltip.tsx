@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Box as MuiBox } from "@mui/material";
-import { Container, Graphics, Sprite, Text } from "pixi.js";
+import { Container, Graphics, Text } from "pixi.js";
 import PixiRenderer from "../pixi/PixiRenderer";
 import Grid from "../pixi/Grid";
 import Box from "../pixi/Box";

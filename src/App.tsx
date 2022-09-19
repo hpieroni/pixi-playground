@@ -11,6 +11,7 @@ import PixiLayout from "./components/PixiLayout";
 import TruncatedText from "./components/TruncatedText";
 import Tooltip from "./components/Tooltip";
 import HitArea from "./components/HitArea";
+import Masking from "./components/Masking";
 
 const theme = createTheme({
   palette: {
@@ -33,6 +34,7 @@ function App() {
             <Route path="truncated-text" element={<TruncatedText />} />
             <Route path="tooltip" element={<Tooltip />} />
             <Route path="hit-area" element={<HitArea />} />
+            <Route path="masking" element={<Masking />} />
             <Route
               path="event-communication"
               element={<EventCommunication />}
