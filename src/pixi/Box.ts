@@ -26,16 +26,14 @@ export class Box extends Container {
     const content = new Container();
     castArray(children).forEach((child) => content.addChild(child));
 
+    const minWidth = options?.minWidth ?? content.width;
     const width =
-      Math.max(content.width, options?.minWidth ?? 0) +
-      padding * 2 +
-      borderWidth * 2;
+      Math.max(content.width, minWidth) + padding * 2 + borderWidth * 2;
+    const minHeight = options?.minHeight ?? content.height;
     const height =
-      Math.max(content.height, options?.minHeight ?? 0) +
-      padding * 2 +
-      borderWidth * 2;
+      Math.max(content.height, minHeight) + padding * 2 + borderWidth * 2;
 
-    if (padding > 0) {
+    if (padding > 0 || minWidth > content.width || minHeight > content.height) {
       content.x = padding;
       content.y = padding;
       const paddingBox = new Graphics();
