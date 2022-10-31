@@ -114,8 +114,8 @@
           ]
         },
         {
-          "label": "column",
-          "type": "column-box",
+          "label": "column-with-shadow",
+          "type": "column-box-shadow",
           "children": [
             {
               "label": "column 1",

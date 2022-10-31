@@ -36,9 +36,16 @@ class Group extends Container {
 
   private buildContent() {
     const children = this.convertChildren();
-    const { type, border, borderRadius, padding, background, ...options } =
-      this.options();
-    const style = { border, borderRadius, padding, background };
+    const {
+      type,
+      border,
+      borderRadius,
+      padding,
+      shadow,
+      background,
+      ...options
+    } = this.options();
+    const style = { border, borderRadius, padding, background, shadow };
 
     switch (type) {
       case "grid":
@@ -105,13 +112,14 @@ const objectDefinitions: { [key: string]: ObjectDefinition } = {
       spacing: 10,
     },
   },
-  "column-box": {
+  "column-box-shadow": {
     element: Group,
     options: {
       type: "column",
       spacing: 10,
       padding: 24,
-      border: { width: 4, color: 0xea1e63 },
+      background: { color: 0xea1e63 },
+      shadow: true,
     },
   },
   row: {

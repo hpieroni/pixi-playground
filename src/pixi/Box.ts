@@ -1,6 +1,22 @@
-import { Container, DisplayObject, Graphics } from "pixi.js";
-import Border, { type BorderConfig } from "./Border";
+import {
+  Container,
+  DisplayObject,
+  Graphics,
+  filters as pixiFilters,
+} from "pixi.js";
 import { castArray } from "./utils";
+import Border, { type BorderConfig } from "./Border";
+import TransparentRectangle from "./TransparentRectangle";
+
+interface ShadowOptions {
+  strength: number;
+  quality: number;
+}
+
+const defaultShadowOptions: ShadowOptions = {
+  strength: 12,
+  quality: 8,
+};
 
 export interface StyleOptions {
   padding?: number;
@@ -10,6 +26,7 @@ export interface StyleOptions {
     color: number;
     alpha?: number;
   };
+  shadow?: ShadowOptions | boolean;
   minWidth?: number;
   minHeight?: number;
 }
@@ -34,6 +51,29 @@ export class Box extends Container {
     const height =
       Math.max(content.height, minHeight) + padding * 2 + borderWidth * 2;
 
+    // Easy way to add a shadow. It's not perfect, but it's good enough for now
+    if (options?.shadow) {
+      const shadowOptions =
+        typeof options.shadow === "boolean"
+          ? defaultShadowOptions
+          : {
+              strength:
+                options.shadow.strength ?? defaultShadowOptions.strength,
+              quality: options.shadow.quality ?? defaultShadowOptions.quality,
+            };
+      const boxShadow = new Graphics()
+        .beginFill(0, 0.5)
+        .drawRoundedRect(0, 0, width, height, options?.borderRadius ?? 0)
+        .endFill();
+      boxShadow.filters = [
+        new pixiFilters.BlurFilter(
+          shadowOptions.strength,
+          shadowOptions.quality
+        ),
+      ];
+      this.addChild(boxShadow);
+    }
+
     if (
       padding > 0 ||
       minWidth > content.width ||
@@ -42,28 +82,18 @@ export class Box extends Container {
     ) {
       content.x = padding;
       content.y = padding;
-      const paddingBox = new Graphics();
+
+      let paddingBox: Graphics;
 
       if (options?.background) {
-        paddingBox.beginFill(
-          options.background.color,
-          options.background.alpha ?? 1
-        );
+        paddingBox = new Graphics()
+          .beginFill(options.background.color, options.background.alpha ?? 1)
+          .drawRoundedRect(0, 0, width, height, options?.borderRadius ?? 0)
+          .endFill();
       } else {
-        // We can't use alpha = 0 in `beginFill` because the box won't be drawn
-        // Using PIXI.filters.AlphaFilter degrades the performance a lot
-        // That is why I decided to use an alpha that is close to 0 (user won't notice the difference)
-        paddingBox.beginFill(0, 1e-10);
+        paddingBox = new TransparentRectangle(0, 0, width, height);
       }
 
-      paddingBox.drawRoundedRect(
-        0,
-        0,
-        width,
-        height,
-        options?.borderRadius ?? 0
-      );
-      paddingBox.endFill();
       this.addChild(paddingBox);
     }
 
