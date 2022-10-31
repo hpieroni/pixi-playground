@@ -33,7 +33,7 @@ export class Box extends Container {
     const height =
       Math.max(content.height, minHeight) + padding * 2 + borderWidth * 2;
 
-    if (padding > 0 || minWidth > content.width || minHeight > content.height) {
+    if (padding > 0 || minWidth > content.width || minHeight > content.height || options?.background) {
       content.x = padding;
       content.y = padding;
       const paddingBox = new Graphics();
