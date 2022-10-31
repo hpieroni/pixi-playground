@@ -4,7 +4,8 @@ import { castArray } from "./utils";
 
 export interface StyleOptions {
   padding?: number;
-  border?: BorderConfig;
+  border?: Omit<BorderConfig, "radius">;
+  borderRadius?: number;
   background?: {
     color: number;
     alpha?: number;
@@ -33,7 +34,12 @@ export class Box extends Container {
     const height =
       Math.max(content.height, minHeight) + padding * 2 + borderWidth * 2;
 
-    if (padding > 0 || minWidth > content.width || minHeight > content.height || options?.background) {
+    if (
+      padding > 0 ||
+      minWidth > content.width ||
+      minHeight > content.height ||
+      options?.background
+    ) {
       content.x = padding;
       content.y = padding;
       const paddingBox = new Graphics();
@@ -55,14 +61,17 @@ export class Box extends Container {
         0,
         width,
         height,
-        options?.border?.radius ?? 0
+        options?.borderRadius ?? 0
       );
       paddingBox.endFill();
       this.addChild(paddingBox);
     }
 
     if (options?.border) {
-      const border = new Border({ width, height }, options.border);
+      const border = new Border(
+        { width, height },
+        { ...options.border, radius: options?.borderRadius }
+      );
       switch (options?.border.target) {
         case "top":
           content.y += borderWidth;
