@@ -60,7 +60,7 @@ class Grid extends Container {
 
     alignElements(align, content.children as Container[], content);
 
-    this.addChild(new Box(content, options.style));
+    this.addChild(options.style ? new Box(content, options.style) : content);
   }
 }
 

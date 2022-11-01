@@ -6,7 +6,7 @@ enum LineAlignment {
   Outer = 1,
 }
 
-export interface BorderConfig {
+export interface BorderOptions {
   width: number;
   color?: number;
   alpha?: number;
@@ -20,17 +20,17 @@ export interface BorderConfig {
 class Border extends Graphics {
   constructor(
     dimension: { width: number; height: number; x?: number; y?: number },
-    config: BorderConfig
+    options: BorderOptions
   ) {
     super();
 
     const { width, height, x = 0, y = 0 } = dimension;
-    const target = config.target ?? "all";
+    const target = options.target ?? "all";
 
     this.lineStyle(
-      config.width,
-      config.color,
-      config.alpha,
+      options.width,
+      options.color,
+      options.alpha,
       target === "left" || target === "right"
         ? LineAlignment.Outer
         : LineAlignment.Inner
@@ -55,7 +55,7 @@ class Border extends Graphics {
         break;
       case "all":
       default:
-        this.drawRoundedRect(x, y, width, height, config.radius ?? 0);
+        this.drawRoundedRect(x, y, width, height, options.radius ?? 0);
     }
   }
 }
