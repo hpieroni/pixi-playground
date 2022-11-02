@@ -1,5 +1,5 @@
 import { Container } from "pixi.js";
-import { alignElements, chunk, type Alignment } from "./utils";
+import { alignHorizontally, chunk, type Alignment } from "./utils";
 import Box, { type StyleOptions } from "./Box";
 
 export interface GridOptions {
@@ -58,7 +58,7 @@ class Grid extends Container {
       content.addChild(rowContainer);
     }
 
-    alignElements(align, content.children as Container[], content);
+    alignHorizontally(align, content.children as Container[], content);
 
     this.addChild(options.style ? new Box(content, options.style) : content);
   }

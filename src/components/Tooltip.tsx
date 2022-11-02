@@ -4,7 +4,7 @@ import { Container, Graphics, Text } from "pixi.js";
 import PixiRenderer from "../pixi/PixiRenderer";
 import Grid from "../pixi/Grid";
 import Box from "../pixi/Box";
-import List from "../pixi/List";
+import List from "../pixi/Row";
 import Tooltip, {
   TooltipPlacement,
   TooltipPositionTarget,

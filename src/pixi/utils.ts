@@ -13,7 +13,7 @@ export function chunk<T>(arr: T[], size: number): T[][] {
 export type Alignment = "start" | "center" | "end";
 
 // This function mutate the elements
-export function alignElements(
+export function alignHorizontally(
   align: Alignment,
   elements: { x: number; width: number }[],
   container: { width: number }
@@ -29,6 +29,28 @@ export function alignElements(
       case "end":
       default:
         element.x = container.width - element.width;
+        break;
+    }
+  }
+}
+
+// This function mutate the elements
+export function alignVertically(
+  align: Alignment,
+  elements: { y: number; height: number }[],
+  container: { height: number }
+) {
+  for (const element of elements) {
+    switch (align) {
+      case "start":
+        element.y = 0;
+        break;
+      case "center":
+        element.y = (container.height - element.height) / 2;
+        break;
+      case "end":
+      default:
+        element.y = container.height - element.height;
         break;
     }
   }

@@ -39,6 +39,22 @@ export interface StyleOptions {
   minHeight?: number;
 }
 
+export function normalizePadding(
+  padding: Padding = 0
+): [number, number, number, number] {
+  const paddings = castArray(padding);
+
+  switch (paddings.length) {
+    case 1:
+      return [paddings[0], paddings[0], paddings[0], paddings[0]];
+    case 2:
+      return [paddings[0], paddings[1], paddings[0], paddings[1]];
+    case 4:
+    default:
+      return [paddings[0], paddings[1], paddings[2], paddings[3]];
+  }
+}
+
 export class Box extends Container {
   constructor(
     children: DisplayObject | DisplayObject[],
@@ -82,29 +98,13 @@ export class Box extends Container {
     return paddingSum > 0;
   }
 
-  private computePadding(
-    padding: Padding = 0
-  ): [number, number, number, number] {
-    const paddings = castArray(padding);
-
-    switch (paddings.length) {
-      case 1:
-        return [paddings[0], paddings[0], paddings[0], paddings[0]];
-      case 2:
-        return [paddings[0], paddings[1], paddings[0], paddings[1]];
-      case 4:
-      default:
-        return [paddings[0], paddings[1], paddings[2], paddings[3]];
-    }
-  }
-
   private renderSpacingAndBackground(
     content: Container<DisplayObject>,
     options: StyleOptions | undefined,
     width: number,
     height: number
   ) {
-    const [paddingTop, , , paddingLeft] = this.computePadding(options?.padding);
+    const [paddingTop, , , paddingLeft] = normalizePadding(options?.padding);
 
     content.x = paddingLeft;
     content.y = paddingTop;
@@ -128,7 +128,7 @@ export class Box extends Container {
     content: Container<DisplayObject>
   ) {
     const [paddingTop, paddingRight, paddingBottom, paddingLeft] =
-      this.computePadding(options?.padding);
+      normalizePadding(options?.padding);
     const borderWidth = options?.border?.width ?? 0;
 
     const minWidth = options?.minWidth ?? content.width;

@@ -1,6 +1,7 @@
 import { Container, Graphics, Text, TextStyle } from "pixi.js";
+import Row from "../../pixi/Row";
+import Column from "../../pixi/Column";
 import Grid from "../../pixi/Grid";
-import List from "../../pixi/List";
 
 interface Data {
   label?: string;
@@ -24,7 +25,7 @@ class Group extends Container {
 
     if (data.label) {
       const label = new Text(data.label, textStyle);
-      this.addChild(new List([label, content], { align: "start" }));
+      this.addChild(new Column([label, content], { align: "start" }));
     } else {
       this.addChild(content);
     }
@@ -51,10 +52,10 @@ class Group extends Container {
       case "grid":
         return new Grid(children, { ...options, style });
       case "row":
-        return new List(children, { direction: "row", ...options, style });
+        return new Row(children, { ...options, style });
       case "column":
       default:
-        return new List(children, { ...options, style });
+        return new Column(children, { ...options, style });
     }
   }
 

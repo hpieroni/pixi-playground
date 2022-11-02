@@ -1,13 +1,8 @@
 import { Container } from "pixi.js";
-import { alignElements, type Alignment } from "./utils";
+import { alignVertically, type Alignment } from "./utils";
 import Box, { type StyleOptions } from "./Box";
 
-export interface ListOptions {
-  /**
-   * List items will be arranged in one column or row.
-   * @default "column"
-   */
-  direction?: "column" | "row";
+export interface RowOptions {
   /**
    * The spacing between rows and columns. If a number is specified, it will use the same spacing for rows and columns
    */
@@ -23,29 +18,21 @@ export interface ListOptions {
 }
 
 class List extends Container {
-  constructor(children: Container[], options: ListOptions = {}) {
+  constructor(children: Container[], options: RowOptions = {}) {
     super();
 
     const content = new Container();
-    const direction = options.direction ?? "column";
     const spacing = options.spacing ?? 0;
     const align = options.align ?? "start";
     let offset = 0;
 
     for (const child of children) {
-      if (direction === "column") {
-        child.y = offset;
-        offset += child.height + spacing;
-      } else {
-        child.x = offset;
-        offset += child.width + spacing;
-      }
+      child.x = offset;
+      offset += child.width + spacing;
       content.addChild(child);
     }
 
-    if (direction === "column") {
-      alignElements(align, children, content);
-    }
+    alignVertically(align, children, content);
 
     this.addChild(options.style ? new Box(content, options.style) : content);
   }
