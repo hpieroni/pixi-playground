@@ -1,13 +1,12 @@
-import { Graphics } from "pixi.js";
+import { Sprite, Texture } from "pixi.js";
 
-class TransparentRectangle extends Graphics {
+class TransparentRectangle extends Sprite {
   constructor(x: number, y: number, width: number, height: number) {
-    super();
-
-    // We can't use alpha = 0 in `beginFill` because the rectangle won't be drawn
-    // Using PIXI.filters.AlphaFilter degrades the performance a lot
-    // That is why I decided to use an alpha that is close to 0 (user won't notice the difference)
-    this.beginFill(0, 1e-10).drawRect(x, y, width, height).endFill();
+    super(Texture.EMPTY);
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
   }
 }
 

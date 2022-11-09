@@ -109,7 +109,7 @@ export class Box extends Container {
     content.x = paddingLeft;
     content.y = paddingTop;
 
-    let paddingBox: Graphics;
+    let paddingBox: DisplayObject;
 
     if (options?.background) {
       paddingBox = new Graphics()

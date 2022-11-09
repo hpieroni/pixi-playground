@@ -4,7 +4,7 @@ import Box, { type StyleOptions } from "./Box";
 
 export interface GridOptions {
   /**
-   * By default all elements will be arranged in one row. Set it to 1 for a vertical list or use a List component
+   * By default all elements will be arranged in one row. Set it to 1 for a column layout or use a Column component
    */
   columns?: number;
   /**
@@ -25,9 +25,9 @@ class Grid extends Container {
   constructor(children: Container[], options: GridOptions = {}) {
     super();
 
-    const content = new Container();
     const columns = options.columns ?? children.length;
     const rows = chunk(children, columns);
+    const rowContainers = [];
 
     const rowSpacing =
       typeof options.spacing === "number"
@@ -41,6 +41,7 @@ class Grid extends Container {
 
     let nextX = 0;
     let nextY = 0;
+    let width = 0;
 
     for (const row of rows) {
       const rowContainer = new Container();
@@ -54,13 +55,17 @@ class Grid extends Container {
 
       nextX = 0;
       nextY += rowContainer.y + rowContainer.height + rowSpacing;
-
-      content.addChild(rowContainer);
+      width = Math.max(width, rowContainer.width);
+      rowContainers.push(rowContainer);
     }
 
-    alignHorizontally(align, content.children as Container[], content);
+    alignHorizontally(align, rowContainers as Container[], { width });
 
-    this.addChild(options.style ? new Box(content, options.style) : content);
+    if (options.style) {
+      this.addChild(new Box(rowContainers, options.style));
+    } else {
+      rowContainers.forEach((row) => this.addChild(row));
+    }
   }
 }
 

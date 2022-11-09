@@ -17,25 +17,29 @@ export interface ColumnOptions {
   style?: StyleOptions;
 }
 
-class List extends Container {
+class Column extends Container {
   constructor(children: Container[], options: ColumnOptions = {}) {
     super();
 
-    const content = new Container();
     const spacing = options.spacing ?? 0;
     const align = options.align ?? "start";
     let offset = 0;
+    let width = 0;
 
     for (const child of children) {
       child.y = offset;
       offset += child.height + spacing;
-      content.addChild(child);
+      width = Math.max(width, child.width);
     }
 
-    alignHorizontally(align, children, content);
+    alignHorizontally(align, children, { width });
 
-    this.addChild(options.style ? new Box(content, options.style) : content);
+    if (options.style) {
+      this.addChild(new Box(children, options.style));
+    } else {
+      children.forEach((child) => this.addChild(child));
+    }
   }
 }
 
-export default List;
+export default Column;

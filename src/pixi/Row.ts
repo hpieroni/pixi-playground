@@ -17,25 +17,29 @@ export interface RowOptions {
   style?: StyleOptions;
 }
 
-class List extends Container {
+class Row extends Container {
   constructor(children: Container[], options: RowOptions = {}) {
     super();
 
-    const content = new Container();
     const spacing = options.spacing ?? 0;
     const align = options.align ?? "start";
     let offset = 0;
+    let height = 0;
 
     for (const child of children) {
       child.x = offset;
       offset += child.width + spacing;
-      content.addChild(child);
+      height = Math.max(height, child.height);
     }
 
-    alignVertically(align, children, content);
+    alignVertically(align, children, { height });
 
-    this.addChild(options.style ? new Box(content, options.style) : content);
+    if (options.style) {
+      this.addChild(new Box(children, options.style));
+    } else {
+      children.forEach((child) => this.addChild(child));
+    }
   }
 }
 
-export default List;
+export default Row;

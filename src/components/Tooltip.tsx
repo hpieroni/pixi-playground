@@ -4,7 +4,7 @@ import { Container, Graphics, Text } from "pixi.js";
 import PixiRenderer from "../pixi/PixiRenderer";
 import Grid from "../pixi/Grid";
 import Box from "../pixi/Box";
-import List from "../pixi/Row";
+import Row from "../pixi/Row";
 import Tooltip, {
   TooltipPlacement,
   TooltipPositionTarget,
@@ -149,7 +149,7 @@ function TooltipExample() {
     rect.beginFill(0xc34288);
     rect.drawRect(50, 50, 100, 100);
     rect.endFill();
-    const complexContent = new List(
+    const complexContent = new Row(
       [
         new Text("This is a title", {
           fontWeight: "bold",
