@@ -9,10 +9,12 @@ export interface GridOptions {
   columns?: number;
   /**
    * The spacing between rows and columns. If a number is specified, it will use the same spacing for rows and columns
+   * @default 0
    */
   spacing?: number | { row?: number; column?: number };
   /**
    * Align items to the start, center or end of the container
+   * @default 'start'
    */
   align?: Alignment;
   /**
@@ -45,10 +47,10 @@ class Grid extends Container {
 
     for (const row of rows) {
       const rowContainer = new Container();
+      rowContainer.y = nextY;
 
       for (const element of row) {
         element.x = nextX;
-        element.y = nextY;
         nextX += element.width + columnSpacing;
         rowContainer.addChild(element);
       }

@@ -92,17 +92,4 @@ describe("Column", () => {
       ],
     });
   });
-
-  xit("should layout children with box styling", () => {
-    const column = new Column(
-      buildTestContainers([{ width: 10, height: 10 }]),
-      {
-        style: {
-          padding: 10,
-        },
-      }
-    );
-
-    testLayout(column, [{ x: 0, y: 0, width: 20, height: 20 }]);
-  });
 });

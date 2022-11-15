@@ -4,11 +4,13 @@ import Box, { type StyleOptions } from "./Box";
 
 export interface RowOptions {
   /**
-   * The spacing between rows and columns. If a number is specified, it will use the same spacing for rows and columns
+   * The spacing between elements
+   * @default 0
    */
   spacing?: number;
   /**
    * Align items to the start, center or end of the container
+   * @default 'start'
    */
   align?: Alignment;
   /**

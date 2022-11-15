@@ -92,14 +92,4 @@ describe("Row", () => {
       ],
     });
   });
-
-  xit("should layout children with box styling", () => {
-    const row = new Row(buildTestContainers([{ width: 10, height: 10 }]), {
-      style: {
-        padding: 10,
-      },
-    });
-
-    testLayout(row, [{ x: 0, y: 0, width: 20, height: 20 }]);
-  });
 });
