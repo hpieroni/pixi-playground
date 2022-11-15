@@ -1,5 +1,5 @@
 import { Container } from "pixi.js";
-import { alignVertically, type Alignment } from "./utils";
+import { alignHorizontally, alignVertically, type Alignment } from "./utils";
 import Box, { type StyleOptions } from "./Box";
 
 export interface WrappedRowOptions {
@@ -13,10 +13,15 @@ export interface WrappedRowOptions {
    */
   spacing?: number;
   /**
+   * Align rows to the start, center or end
+   * @default start
+   */
+  alignX?: Alignment;
+  /**
    * Align each row items to the start, center or end
    * @default start
    */
-  align?: Alignment;
+  alignY?: Alignment;
   /**
    * Box syles options (padding, border, background)
    */
@@ -32,7 +37,8 @@ class WrappedRow extends Container {
 
     const wrapWidth = options?.wrapWidth ?? Infinity;
     const spacing = options?.spacing ?? 0;
-    const align = options?.align ?? "start";
+    const alignX = options?.alignX ?? "start";
+    const alignY = options?.alignY ?? "start";
     let nextX = 0;
     let nextY = 0;
     let row = new Container();
@@ -57,8 +63,13 @@ class WrappedRow extends Container {
       row.addChild(child);
     }
 
+    const maxRowWidth = Math.max(...rowContainers.map((row) => row.width));
+    alignHorizontally(alignX, rowContainers as Container[], {
+      width: maxRowWidth,
+    });
+
     for (const row of rowContainers) {
-      alignVertically(align, row.children as Container[], row);
+      alignVertically(alignY, row.children as Container[], row);
     }
 
     if (options?.style) {
