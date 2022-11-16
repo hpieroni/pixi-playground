@@ -56,7 +56,7 @@ class Grid extends Container {
       }
 
       nextX = 0;
-      nextY += rowContainer.y + rowContainer.height + rowSpacing;
+      nextY += rowContainer.height + rowSpacing;
       width = Math.max(width, rowContainer.width);
       rowContainers.push(rowContainer);
     }
